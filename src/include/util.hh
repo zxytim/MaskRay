@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Tue Jun 18 23:51:12 2013 +0800
+ * $Date: Wed Jun 19 01:40:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -8,11 +8,15 @@
 
 #include "image.hh"
 #include <cv.h>
+#include <highgui.h>
 
 #include "renderable.hh"
 #include "surface_property.hh"
 #include "texture_mapper.hh"
 #include "material.hh"
+#include <cstdio>
+#include <cstdlib>
+#include <unistd.h>
 
 cv::Mat image_to_mat(const Image &image);
 

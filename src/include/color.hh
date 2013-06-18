@@ -1,11 +1,12 @@
 /*
  * $File: color.hh
- * $Date: Wed Jun 19 00:12:21 2013 +0800
+ * $Date: Wed Jun 19 01:50:34 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
+#include "type.hh"
 typedef double color_t;
 
 class Color
@@ -26,7 +27,8 @@ class Color
 			return *this;
 		}
 
-		Color operator / (real_t ratio) const {
+		Color operator / (real_t _ratio) const {
+			register real_t ratio = 1.0 / _ratio;
 			return Color(r * ratio, g * ratio, b * ratio);
 		}
 		Color& operator /= (real_t ratio) {

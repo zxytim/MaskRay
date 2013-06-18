@@ -1,42 +1,89 @@
 /*
  * $File: raytracer.cc
- * $Date: Wed Jun 19 00:13:20 2013 +0800
+ * $Date: Wed Jun 19 03:13:35 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "raytracer.hh"
 #include "intensity.hh"
+#include <queue>
+#include <thread>
+#include <mutex>
 #include "math.hh"
+#include "util.hh"
+#include <cv.h>
+#include <highgui.h>
 
 static Color intensity_to_color(const Intensity &intensity)
 {
 	return Color(intensity.r, intensity.g, intensity. b);
 }
 
+Image* image_accum;
+Image* image_show;
+std::mutex lock;
+int phase;
+
+void RayTracer::iterate(Camera &camera)
+{
+	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
+	while (true) {
+		Color *image_data = image->data;
+		for (int i = 0; i < camera.resol_x; i ++)
+			//#pragma omp parallel for 
+			for (int j = 0; j < camera.resol_y; j ++) {
+				Ray ray = camera.emit_ray(i, j);
+				*image_data = intensity_to_color(trace(ray));
+				image_data ++;
+			}
+
+		lock.lock();
+
+		phase += 1;
+		printf("phase %3d ...\r", phase);
+		fflush(stdout);
+
+		Color *acc = image_accum->data;
+		Color *ptr = image->data;
+		for (int i = 0; i < camera.resol_x; i ++)
+			for (int j = 0; j < camera.resol_y; j ++)
+				*(acc ++) += *(ptr ++);
+		if (phase & 3)
+		{
+			acc = image_accum->data;
+			Color *image_show_data = image_show->data;
+			for (int i = 0; i < camera.resol_x; i ++)
+				for (int j = 0; j < camera.resol_y; j ++) {
+					*image_show_data = *acc/ phase;
+					image_show_data ++;
+					acc ++;
+				}
+			cv::Mat mat = image_to_mat(*image_show);
+			//cv::imshow("process", mat);
+			cv::imwrite("output-mid.png", mat);
+			//cv::waitKey(1);
+		}
+		lock.unlock();
+	}
+
+}
+
 shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
 {
 	this->scene = &scene;
-	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
+	image_show = (new Image(camera.resol_x, camera.resol_y));
+	image_accum = (new Image(camera.resol_x, camera.resol_y));
+	cv::namedWindow("process", CV_WINDOW_AUTOSIZE);
 
-	int n_ray_emit_per_pixel = 10;
-	for (int phase = 0; phase < n_ray_emit_per_pixel; phase ++) {
-		Color *image_data = image->data;
-		for (int i = 0; i < camera.resol_x; i ++)
-			for (int j = 0; j < camera.resol_y; j ++) {
-				Ray ray = camera.emit_ray(i, j);
-				*image_data += intensity_to_color(trace(ray));
-				image_data ++;
-			}
-	}
-
-	Color *image_data = image->data;
-	for (int i = 0; i < camera.resol_x; i ++)
-		for (int j = 0; j < camera.resol_y; j ++) {
-			*image_data /= n_ray_emit_per_pixel;
-			image_data ++;
-		}
-
-	return image;
+	int nworker = 4;
+#if 1
+	auto threads = new std::thread[nworker];
+	for (int i = 0; i < nworker; i ++)
+		threads[i] = std::thread([&]{iterate(camera);});
+	
+#endif
+	iterate(camera);
+	return nullptr;
 }
 
 Intensity RayTracer::trace(const Ray &ray)

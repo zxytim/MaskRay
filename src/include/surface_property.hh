@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.hh
- * $Date: Tue Jun 18 21:49:02 2013 +0800
+ * $Date: Wed Jun 19 02:32:01 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -8,6 +8,7 @@
 
 #include "surface_property/mono_glowing_sp.hh"
 #include "surface_property/surface_property.hh"
+#include "surface_property/mono_glowing_lambertian_sp.hh"
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

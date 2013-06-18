@@ -1,10 +1,11 @@
 /*
  * $File: util.cc
- * $Date: Wed Jun 19 00:05:48 2013 +0800
+ * $Date: Wed Jun 19 02:14:23 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "util.hh"
+#include <algorithm>
 
 using namespace cv;
 
@@ -16,9 +17,9 @@ Mat image_to_mat(const Image &image)
 	for (int i = 0; i < mat.rows; i ++) {
 		uchar *p = mat.ptr<uchar>(i);
 		for (int j = 0; j < mat.cols; j ++) {
-			p[0] = data[j * image.height + i].b * 255;
-			p[1] = data[j * image.height + i].g * 255;
-			p[2] = data[j * image.height + i].r * 255;
+			p[0] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].b * 255);
+			p[1] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].g * 255);
+			p[2] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].r * 255);
 			p += 3;
 		}
 	}

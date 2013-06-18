@@ -1,6 +1,6 @@
 #
 # $File: Makefile
-# $Date: Tue Jun 18 23:04:43 2013 +0800
+# $Date: Wed Jun 19 03:11:19 2013 +0800
 #
 # A single output portable Makefile for
 # simple c++ project
@@ -15,12 +15,13 @@ INCLUDE_DIR = -I src/include
 DEFINES = -D__DEBUG_BUILD
 
 
-CXXFLAGS += -g -O0 #-pg
+CXXFLAGS += -O3 #-g -O0 #-pg
 CXXFLAGS += #$(DEFINES)
 CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall -Wextra 
 CXXFLAGS += $(INCLUDE_DIR)
 CXXFLAGS += $(shell pkg-config --libs --cflags opencv)
+CXXFLAGS += -fopenmp
 
 LDFLAGS = 
 

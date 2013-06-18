@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.hh
- * $Date: Tue Jun 18 21:54:15 2013 +0800
+ * $Date: Wed Jun 19 02:43:51 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -33,6 +33,7 @@ class RayTracer
 		Intensity do_trace(const Ray &ray, int depth);
 
 		shared_ptr<IntersectInfo> get_closest_intersection(const Ray &ray);
+		void iterate(Camera &camera);
 };
 
 /**
