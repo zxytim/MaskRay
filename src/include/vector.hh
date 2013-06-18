@@ -1,0 +1,105 @@
+/*
+ * $File: vector.hh
+ * $Date: Wed Jun 19 00:04:41 2013 +0800
+ * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
+
+#pragma once
+
+#include "type.hh"
+
+#include <cmath>
+
+class Vector
+{
+	public:
+		real_t x, y, z;
+		Vector(){}
+		Vector(real_t x, real_t y, real_t z) :
+			x(x), y(y), z(z) {}
+		inline Vector operator - (const Vector &v) const {
+			return Vector(x - v.x, y - v.y, z - v.z);
+		}
+		inline Vector operator - () const {
+			return *this;
+		}
+		inline Vector operator -= (const Vector &v) {
+			x -= v.x;
+		   	y -= v.y;
+		   	z -= v.z;
+			return *this;
+		}
+		inline Vector operator + (const Vector &v) const {
+			return Vector(x + v.x, y + v.y, z + v.z);
+		}
+		inline Vector& operator += (const Vector &v) {
+			x += v.x;
+		   	y += v.y;
+		   	z += v.z;
+			return *this;
+		}
+		inline Vector operator * (real_t ratio) const {
+			return Vector(x * ratio, y * ratio, z * ratio);
+		}
+
+		inline Vector operator / (real_t _ratio) const {
+			register real_t ratio = 1.0 / _ratio;
+			return Vector(x * ratio, y * ratio, z * ratio);
+		}
+
+		inline Vector& operator /= (real_t _ratio) {
+			register real_t ratio = 1.0 / _ratio;
+			x *= ratio;
+			y *= ratio;
+			z *= ratio;
+			return *this;
+		}
+
+		inline Vector& operator *= (real_t ratio) {
+			x *= ratio;
+			y *= ratio;
+			z *= ratio;
+			return *this;
+		}
+		inline real_t dot(const Vector &v) const {
+			return x * v.x + y * v.y + z * v.z;
+		}
+		inline Vector cross(const Vector &v) const {
+			return Vector(y * v.z - z * v.y,
+					z * v.x - x * v.z,
+					x * v.y - y * v.x);
+		}
+
+		inline Vector normalize() const {
+			return *this / length();
+		}
+
+		inline Vector& to_normalized() {
+			*this /= length();
+			return *this;
+		}
+
+		inline Vector length_of(real_t len) const {
+			return *this / length() * len;
+		}
+
+		inline Vector &to_length(real_t len) {
+			*this *= len / length();
+			return *this;
+		}
+
+		inline real_t length() const {
+			return sqrt(x * x + y * y + z * z);
+		}
+
+		inline real_t lengthsqr() const {
+			return x * x + y * y + z * z;
+		}
+
+
+};
+
+/**
+ * vim: syntax=cpp11 foldmethod=marker
+ */
+
