@@ -1,6 +1,6 @@
 /*
  * $File: vector.hh
- * $Date: Wed Jun 19 00:04:41 2013 +0800
+ * $Date: Wed Jun 19 14:09:07 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -21,7 +21,7 @@ class Vector
 			return Vector(x - v.x, y - v.y, z - v.z);
 		}
 		inline Vector operator - () const {
-			return *this;
+			return *this * (-1);
 		}
 		inline Vector operator -= (const Vector &v) {
 			x -= v.x;

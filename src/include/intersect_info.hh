@@ -1,6 +1,6 @@
 /*
  * $File: intersect_info.hh
- * $Date: Tue Jun 18 22:29:26 2013 +0800
+ * $Date: Wed Jun 19 13:23:35 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 

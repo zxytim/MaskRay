@@ -1,11 +1,12 @@
 /*
  * $File: util.cc
- * $Date: Wed Jun 19 02:14:23 2013 +0800
+ * $Date: Wed Jun 19 19:29:14 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "util.hh"
 #include <algorithm>
+#include <sstream>
 
 using namespace cv;
 
@@ -27,7 +28,8 @@ Mat image_to_mat(const Image &image)
 	return mat;
 }
 
-Renderable *make_renderable(Geometry *geometry,
+Renderable *make_renderable(std::string name, 
+		Geometry *geometry,
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper,
 		Material *material)
@@ -40,9 +42,30 @@ Renderable *make_renderable(Geometry *geometry,
 		mtrl = shared_ptr<Material>(new Material(1.0));
 
 	return new Renderable(
+			name,
 			shared_ptr<Geometry>(geometry),
 			shared_ptr<SurfaceProperty>(surface_property),
 			tm, mtrl);
+}
+
+Renderable *make_renderable_noname(
+		Geometry *geometry,
+		SurfaceProperty *surface_property,
+		TextureMapper *texture_mapper,
+		Material *material)
+{
+	// FIXME: not thread safe
+	static int count = 0;
+	std::string name;
+
+	std::stringstream ss;
+	ss << count ++;
+	ss >> name;
+	return make_renderable(name, geometry, surface_property, texture_mapper, material);
+}
+
+shared_ptr<Geometry> fread_mesh(const std::string &fname)
+{
 }
 
 /**

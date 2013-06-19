@@ -1,6 +1,6 @@
 /*
  * $File: sphere.cc
- * $Date: Wed Jun 19 02:02:57 2013 +0800
+ * $Date: Wed Jun 19 16:14:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -9,22 +9,21 @@
 
 shared_ptr<GeometryIntersectInfo> Sphere::intersect(const Ray &ray)
 {
-	Vector e = this->o - ray.o;
-	real_t a = e.dot(ray.dir);
-	if (le0(a))
+	auto d = ray.o - this->o;
+	real_t b = d.dot(ray.dir);
+	real_t c = d.dot(d) - this->radius * this->radius;
+	real_t dist2 = b * b - c;
+	real_t dist = 0;
+	if (dist2 > 0)
+		dist = -b - sqrt(dist2);
+	else 
 		return nullptr;
-	real_t c2 = e.lengthsqr();
-	
-	real_t b2 = c2 - a * a;
-	real_t r2 = this->radius * radius;
-	
-	real_t f2 = r2 - b2;
-	if (lt0(f2))
+	if (dist < 0)
 		return nullptr;
 
-	return shared_ptr<GeometryIntersectInfo>(new SphereIntersectInfo(a - sqrt(f2), e * (-1)));
+	Vector normal = (ray.o + ray.dir * dist - this->o).normalize();
+	return shared_ptr<GeometryIntersectInfo>(new SphereIntersectInfo(dist, normal));
 }
-
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

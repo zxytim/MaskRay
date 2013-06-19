@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Wed Jun 19 01:40:47 2013 +0800
+ * $Date: Wed Jun 19 19:27:19 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -17,13 +17,23 @@
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>
+#include <string>
 
 cv::Mat image_to_mat(const Image &image);
 
-Renderable *make_renderable(Geometry *geometry,
+Renderable *make_renderable(std::string name, 
+		Geometry *geometry,
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper = NULL,
 		Material *material = NULL);
+
+Renderable *make_renderable_noname(
+		Geometry *geometry,
+		SurfaceProperty *surface_property,
+		TextureMapper *texture_mapper = NULL,
+		Material *material = NULL);
+
+shared_ptr<Geometry> fread_mesh(const std::string &fname);
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

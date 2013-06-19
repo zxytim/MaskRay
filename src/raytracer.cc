@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Wed Jun 19 03:13:35 2013 +0800
+ * $Date: Wed Jun 19 21:01:37 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -24,10 +24,13 @@ Image* image_show;
 std::mutex lock;
 int phase;
 
+bool still_iterate;
+int N_ITER_MAX = 10;
+
 void RayTracer::iterate(Camera &camera)
 {
 	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
-	while (true) {
+	while (still_iterate) {
 		Color *image_data = image->data;
 		for (int i = 0; i < camera.resol_x; i ++)
 			//#pragma omp parallel for 
@@ -48,7 +51,7 @@ void RayTracer::iterate(Camera &camera)
 		for (int i = 0; i < camera.resol_x; i ++)
 			for (int j = 0; j < camera.resol_y; j ++)
 				*(acc ++) += *(ptr ++);
-		if (phase & 3)
+		if ((phase & 3) || phase == N_ITER_MAX)
 		{
 			acc = image_accum->data;
 			Color *image_show_data = image_show->data;
@@ -62,10 +65,11 @@ void RayTracer::iterate(Camera &camera)
 			//cv::imshow("process", mat);
 			cv::imwrite("output-mid.png", mat);
 			//cv::waitKey(1);
+			if (phase == N_ITER_MAX)
+				still_iterate = false;
 		}
 		lock.unlock();
 	}
-
 }
 
 shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
@@ -76,18 +80,22 @@ shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
 	cv::namedWindow("process", CV_WINDOW_AUTOSIZE);
 
 	int nworker = 4;
-#if 1
+	still_iterate = true;
 	auto threads = new std::thread[nworker];
 	for (int i = 0; i < nworker; i ++)
 		threads[i] = std::thread([&]{iterate(camera);});
-	
-#endif
-	iterate(camera);
+
+	for (int i = 0; i < nworker; i ++)
+		threads[i].join();
+
+	delete [] threads;
 	return nullptr;
 }
 
+int cnt = 0;
 Intensity RayTracer::trace(const Ray &ray)
 {
+	cnt = 0;
 	return do_trace(ray, conf.TRACE_DEPTH_MAX);
 }
 
@@ -122,10 +130,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 		return Intensity(0, 0, 0); // black
 
 	Ray ray = inter->ray_bounce(incident);
-
-	if (ray.dir.dot(incident.dir) > 0.0) // in order to prevent float point accuracy problems:
-		ray.o += incident.dir * EPS; // if refracts, move the intersection a little more in
-	else ray.o -= incident.dir * EPS; // if reflects, move the intersection a little more out
+	ray.o += ray.dir * EPS;
 
 	Renderable *renderable = inter->renderable;
 
@@ -137,7 +142,6 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	return ret;
 
 	// TODO:
-	//		REFRACT
 	//		MATERIAL
 	//		MEDIA
 	//		BRDFs

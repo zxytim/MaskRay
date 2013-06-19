@@ -1,6 +1,6 @@
 /*
  * $File: texture_mapper.hh
- * $Date: Tue Jun 18 21:45:36 2013 +0800
+ * $Date: Wed Jun 19 11:44:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -8,6 +8,9 @@
 #include "intersect_info.hh"
 #include "intensity.hh"
 
+/*
+ * Texture Mapper may be geometry related
+ */
 class TextureMapper
 {
 	public:
