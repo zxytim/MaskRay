@@ -1,6 +1,6 @@
 /*
  * $File: util.cc
- * $Date: Wed Jun 19 19:29:14 2013 +0800
+ * $Date: Thu Jun 20 01:35:17 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -21,6 +21,12 @@ Mat image_to_mat(const Image &image)
 			p[0] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].b * 255);
 			p[1] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].g * 255);
 			p[2] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].r * 255);
+
+#if 0
+			p[0] = std::min(255.0, pow(data[(image.width - 1 - j) * image.height + (image.height - i)].b, 1 / 2.2) * 255 + 0.5);
+			p[1] = std::min(255.0, pow(data[(image.width - 1 - j) * image.height + (image.height - i)].g, 1 / 2.2) * 255 + 0.5);
+			p[2] = std::min(255.0, pow(data[(image.width - 1 - j) * image.height + (image.height - i)].r, 1 / 2.2) * 255 + 0.5);
+#endif
 			p += 3;
 		}
 	}
@@ -62,10 +68,6 @@ Renderable *make_renderable_noname(
 	ss << count ++;
 	ss >> name;
 	return make_renderable(name, geometry, surface_property, texture_mapper, material);
-}
-
-shared_ptr<Geometry> fread_mesh(const std::string &fname)
-{
 }
 
 /**

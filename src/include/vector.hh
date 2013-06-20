@@ -1,6 +1,6 @@
 /*
  * $File: vector.hh
- * $Date: Wed Jun 19 14:09:07 2013 +0800
+ * $Date: Wed Jun 19 21:51:54 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -95,8 +95,16 @@ class Vector
 		inline real_t lengthsqr() const {
 			return x * x + y * y + z * z;
 		}
+};
+
+inline Vector operator * (real_t ratio, const Vector &v) {
+	return v * ratio;
+}
 
 
+// TODO: use real 2D Vector
+class Vector2D : public Vector
+{
 };
 
 /**

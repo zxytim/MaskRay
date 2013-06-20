@@ -1,6 +1,6 @@
 /*
  * $File: intersect_info.hh
- * $Date: Wed Jun 19 13:23:35 2013 +0800
+ * $Date: Wed Jun 19 21:35:27 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -18,6 +18,8 @@ struct IntersectInfo
 	
 	// random by default, which is a Lambertian surface
 	Ray ray_bounce(const Ray &incident);
+
+	virtual ~IntersectInfo(){}
 };
 
 /**

@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Wed Jun 19 19:27:19 2013 +0800
+ * $Date: Wed Jun 19 21:34:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -32,8 +32,6 @@ Renderable *make_renderable_noname(
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper = NULL,
 		Material *material = NULL);
-
-shared_ptr<Geometry> fread_mesh(const std::string &fname);
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Wed Jun 19 21:01:37 2013 +0800
+ * $Date: Thu Jun 20 15:58:00 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -13,6 +13,9 @@
 #include "util.hh"
 #include <cv.h>
 #include <highgui.h>
+#include <algorithm>
+
+using namespace std;
 
 static Color intensity_to_color(const Intensity &intensity)
 {
@@ -25,8 +28,9 @@ std::mutex lock;
 int phase;
 
 bool still_iterate;
-int N_ITER_MAX = 10;
+int N_ITER_MAX = 100000;
 
+real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
 void RayTracer::iterate(Camera &camera)
 {
 	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
@@ -36,7 +40,8 @@ void RayTracer::iterate(Camera &camera)
 			//#pragma omp parallel for 
 			for (int j = 0; j < camera.resol_y; j ++) {
 				Ray ray = camera.emit_ray(i, j);
-				*image_data = intensity_to_color(trace(ray));
+				Color color = intensity_to_color(trace(ray));
+				*image_data = Color(clamp(color.r), clamp(color.g), clamp(color.b));
 				image_data ++;
 			}
 
@@ -62,9 +67,9 @@ void RayTracer::iterate(Camera &camera)
 					acc ++;
 				}
 			cv::Mat mat = image_to_mat(*image_show);
-			//cv::imshow("process", mat);
+			cv::imshow("process", mat);
 			cv::imwrite("output-mid.png", mat);
-			//cv::waitKey(1);
+			cv::waitKey(1);
 			if (phase == N_ITER_MAX)
 				still_iterate = false;
 		}
@@ -129,14 +134,30 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	if (inter == nullptr)
 		return Intensity(0, 0, 0); // black
 
+	Renderable *renderable = inter->renderable;
+
+	Intensity texture = renderable->texture_mapper->get_texture(*inter);
+	Intensity emission = renderable->surface_property->get_emission(*inter);
+
+	// Russian Roulette
+	real_t prob = max(texture.r, max(texture.g, texture.b));
+	if (depth > 5 || !prob) {
+		if (rand_real() < prob) 
+			texture = texture / prob;
+		else
+			return emission;
+	}
+
 	Ray ray = inter->ray_bounce(incident);
 	ray.o += ray.dir * EPS;
 
-	Renderable *renderable = inter->renderable;
 
+	Intensity ret(0, 0, 0);
+
+	//if (texture.lengthsqr() > 0.1)
+	ret = do_trace(ray, depth - 1) * texture;
 	// traced intensity * texture
-	Intensity ret = do_trace(ray, depth - 1) * renderable->texture_mapper->get_texture(*inter)
-		+ renderable->surface_property->get_emission(*inter);
+	ret = ret + emission;
 
 	// FIXME: energy not used
 	return ret;

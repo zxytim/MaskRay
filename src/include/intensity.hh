@@ -1,6 +1,6 @@
 /*
  * $File: intensity.hh
- * $Date: Tue Jun 18 22:28:12 2013 +0800
+ * $Date: Thu Jun 20 02:16:54 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -24,10 +24,17 @@ class Intensity
 		inline Intensity operator * (const real_t &ratio) const {
 			return Intensity(r * ratio, g * ratio, b * ratio);
 		}
+		inline Intensity operator / (real_t _ratio) const {
+			real_t ratio = 1.0 / _ratio;
+			return Intensity(r * ratio, g * ratio, b * ratio);
+		}
 
 		inline Intensity operator + (const Intensity &intensity) const {
 			return Intensity(r + intensity.r, g + intensity.g, b + intensity. b);
 		}
+
+		inline real_t lengthsqr() const { return r * r + g * g + b * b; }
+		inline real_t length() const { return sqrt(r * r + g * g + b * b); }
 };
 
 /**

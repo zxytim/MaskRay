@@ -1,6 +1,6 @@
 /*
  * $File: renderable.hh
- * $Date: Wed Jun 19 16:24:43 2013 +0800
+ * $Date: Wed Jun 19 21:36:32 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -21,9 +21,9 @@ class Renderable
 		 * TODO:
 		 *		Bouding Box
 		 */
-		shared_ptr<Geometry> geometry;
 
-		shared_ptr<IntersectInfo> intersect(const Ray &ray);
+		std::string name;
+		shared_ptr<Geometry> geometry;
 		shared_ptr<SurfaceProperty> surface_property;
 		shared_ptr<TextureMapper> texture_mapper;
 		shared_ptr<Material> material;
@@ -35,8 +35,8 @@ class Renderable
 				shared_ptr<Material> material = nullptr);
 
 		Ray ray_bounce(const Ray &incident, const Ray &normal);
+		shared_ptr<IntersectInfo> intersect(const Ray &ray);
 
-		std::string name;
 };
 
 
