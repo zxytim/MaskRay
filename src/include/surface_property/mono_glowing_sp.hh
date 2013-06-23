@@ -1,6 +1,6 @@
 /*
  * $File: mono_glowing_sp.hh
- * $Date: Tue Jun 18 22:49:51 2013 +0800
+ * $Date: Sun Jun 23 20:18:11 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -12,6 +12,10 @@ class MonoGlowingSurfaceProperty : public SurfaceProperty
 	public:
 		MonoGlowingSurfaceProperty(const Intensity &intensity = Intensity(1.0, 1.0, 1.0)) :
 			intensity(intensity) {}
+
+		virtual bool is_emissive() const {
+			return true;
+		}
 
 		virtual Intensity get_emission(IntersectInfo &) {
 			return intensity;

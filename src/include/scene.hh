@@ -1,6 +1,6 @@
 /*
  * $File: scene.hh
- * $Date: Mon Jun 17 19:35:19 2013 +0800
+ * $Date: Sun Jun 23 20:22:09 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -16,6 +16,8 @@ class Scene
 
 		std::vector<Renderable *> renderable;
 
+		// emissive objects, a subset of renderable
+		std::vector<Renderable *> emissive_renderable; 
 };
 
 /**

@@ -1,6 +1,6 @@
 /*
  * $File: geometry.hh
- * $Date: Tue Jun 18 22:30:59 2013 +0800
+ * $Date: Sun Jun 23 20:13:02 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -22,6 +22,9 @@ class Geometry
 {
 	public:
 		virtual bool is_finite() const {
+			return false;
+		}
+		virtual bool is_emissive() const {
 			return false;
 		}
 		virtual std::shared_ptr<GeometryIntersectInfo> intersect(const Ray &ray) = 0;

@@ -1,6 +1,6 @@
 /*
  * $File: renderable.hh
- * $Date: Wed Jun 19 21:36:32 2013 +0800
+ * $Date: Sun Jun 23 20:20:57 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -36,6 +36,12 @@ class Renderable
 
 		Ray ray_bounce(const Ray &incident, const Ray &normal);
 		shared_ptr<IntersectInfo> intersect(const Ray &ray);
+
+		bool is_emissive() const {
+			return surface_property->is_emissive();
+		}
+
+		int id; // this id is set by scene automatically
 
 };
 

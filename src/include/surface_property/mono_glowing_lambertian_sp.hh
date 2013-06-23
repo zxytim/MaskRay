@@ -1,6 +1,6 @@
 /*
  * $File: mono_glowing_lambertian_sp.hh
- * $Date: Wed Jun 19 13:28:48 2013 +0800
+ * $Date: Sun Jun 23 22:33:40 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -11,13 +11,16 @@ class MonoGlowingLambertianSurfaceProperty : public SurfaceProperty
 {
 	public:
 		
-		MonoGlowingLambertianSurfaceProperty(const Intensity &intensity) :
-			intensity(intensity) {}
+		MonoGlowingLambertianSurfaceProperty(const Intensity &emission) :
+			emission(emission) {}
+		virtual bool is_emissive() const { 
+			return true;
+		}
 		virtual Intensity get_emission(IntersectInfo &) {
-			return intensity;
+			return emission;
 		}
 
-		Intensity intensity;
+		Intensity emission;
 };
 
 /**

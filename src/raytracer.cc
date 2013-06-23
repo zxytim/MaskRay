@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Thu Jun 20 15:58:00 2013 +0800
+ * $Date: Mon Jun 24 01:41:34 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -24,15 +24,22 @@ static Color intensity_to_color(const Intensity &intensity)
 
 Image* image_accum;
 Image* image_show;
-std::mutex lock;
 int phase;
 
 bool still_iterate;
 int N_ITER_MAX = 100000;
 
 real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
+Intensity clamp(const Intensity &i) {
+	return Intensity(clamp(i.r), clamp(i.g), clamp(i.b));
+}
+
+Color clamp(const Color &i) {
+	return Color(clamp(i.r), clamp(i.g), clamp(i.b));
+}
 void RayTracer::iterate(Camera &camera)
 {
+	static std::mutex lock;
 	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
 	while (still_iterate) {
 		Color *image_data = image->data;
@@ -41,7 +48,7 @@ void RayTracer::iterate(Camera &camera)
 			for (int j = 0; j < camera.resol_y; j ++) {
 				Ray ray = camera.emit_ray(i, j);
 				Color color = intensity_to_color(trace(ray));
-				*image_data = Color(clamp(color.r), clamp(color.g), clamp(color.b));
+				*image_data = color; //Color(clamp(color.r), clamp(color.g), clamp(color.b));
 				image_data ++;
 			}
 
@@ -97,10 +104,8 @@ shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
 	return nullptr;
 }
 
-int cnt = 0;
 Intensity RayTracer::trace(const Ray &ray)
 {
-	cnt = 0;
 	return do_trace(ray, conf.TRACE_DEPTH_MAX);
 }
 
@@ -127,8 +132,6 @@ shared_ptr<IntersectInfo> RayTracer::get_closest_intersection(const Ray &ray)
 
 Intensity RayTracer::do_trace(const Ray &incident, int depth)
 {
-	if (incident.energy < conf.STOP_ENERGY_THRESHOLD || depth == 0)
-		return Intensity(0, 0, 0);
 
 	auto inter = get_closest_intersection(incident);
 	if (inter == nullptr)
@@ -139,6 +142,10 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	Intensity texture = renderable->texture_mapper->get_texture(*inter);
 	Intensity emission = renderable->surface_property->get_emission(*inter);
 
+	if (incident.energy < conf.STOP_ENERGY_THRESHOLD || depth == 0)
+		return emission;
+
+#if 0
 	// Russian Roulette
 	real_t prob = max(texture.r, max(texture.g, texture.b));
 	if (depth > 5 || !prob) {
@@ -147,6 +154,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 		else
 			return emission;
 	}
+#endif
 
 	Ray ray = inter->ray_bounce(incident);
 	ray.o += ray.dir * EPS;
@@ -154,9 +162,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 
 	Intensity ret(0, 0, 0);
 
-	//if (texture.lengthsqr() > 0.1)
 	ret = do_trace(ray, depth - 1) * texture;
-	// traced intensity * texture
 	ret = ret + emission;
 
 	// FIXME: energy not used

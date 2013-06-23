@@ -1,6 +1,6 @@
 /*
  * $File: mesh.cc
- * $Date: Wed Jun 19 22:56:09 2013 +0800
+ * $Date: Mon Jun 24 01:52:29 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -18,41 +18,41 @@ using namespace std;
 std::shared_ptr<GeometryIntersectInfo> Mesh::intersect(const Ray &ray)
 {
 	auto ret = new MeshIntersectInfo();
+	ret->dist = 1e100;
 
 	for (auto fa: face) {
-		Vector p[3] = {v[fa.v[0]], v[fa.v[1]], v[fa.v[2]]};
-		const Vector &d = ray.dir,
-			  &o = ray.o;
+		Vector vert[3] = {v[fa.v[0]], v[fa.v[1]], v[fa.v[2]]};
 
-		Vector e1 = p[1] - p[0],
-			   e2 = p[2] - p[0];
+		Vector edge1 = vert[1] - vert[0],
+			   edge2 = vert[2] - vert[0];
+
+		Vector pvec = ray.dir.cross(edge2);
+		real_t det = edge1.dot(pvec);
+		if (det > -EPS && det < EPS)
+			continue;
+
+		real_t inv_det = 1.0 / det;
+
+		Vector tvec = ray.o - vert[0];
+		real_t u = tvec.dot(pvec) * inv_det;
+		if (u < 0.0 || u > 1.0)
+			continue;
+
+		Vector qvec = tvec.cross(edge1);
+		real_t v = ray.dir.dot(qvec) * inv_det;
+		if (v < 0.0 || u + v > 1.0)
+			continue;
 		
-		Vector q = d.cross(e2);
-		real_t f = e1.dot(q);
-		if (fabs(f) < EPS)
-			continue;
+		real_t dist = edge2.dot(qvec) * inv_det;
 
-		f = 1.0 / f;
-
-		Vector s = o - p[0];
-		real_t u = f * s.dot(q);
-		if (u < 0)
-			continue;
-
-		Vector r = s.cross(e1);
-		real_t v = f * d.dot(r);
-		if (v < 0 || u + v > 1.0)
-			continue;
-
-		real_t dist = -f * e2.dot(r);
-
-		if (dist < EPS)
-			continue;
-
-		if (dist < ret->dist) {
+		if (dist > EPS && dist < ret->dist) {
+#if 0
 			Vector normal = (1 - u - v) * vn[fa.vn[0]]
 				+ u * vn[fa.vn[1]]
 				+ v * vn[fa.vn[2]];
+#else
+			Vector normal = (vert[1] - vert[0]).cross(vert[2] - vert[0]);
+#endif
 
 			if (normal.dot(ray.dir) > 0)
 				normal *= -1;

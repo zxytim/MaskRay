@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.hh
- * $Date: Wed Jun 19 12:51:38 2013 +0800
+ * $Date: Sun Jun 23 20:26:09 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -28,7 +28,15 @@ class SurfaceProperty
 		virtual Ray ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
 				shared_ptr<Material> material);
 
+
+		// whether emissive
+		virtual bool is_emissive() const {
+			return false;
+		}
+
 		// no emisssion by default
+		// emission can be heterogenous
+		// @intersect_info is the ray shoot to this object
 		virtual Intensity get_emission(IntersectInfo &intersect_info);
 
 		shared_ptr<EmissionProperty> emission_property;
