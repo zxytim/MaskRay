@@ -14,7 +14,7 @@ class GlassSurfaceProperty : public SurfaceProperty
 		GlassSurfaceProperty(real_t reflectance = 0.05) :
 			reflectance(reflectance) {}
 		virtual Ray ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
-				shared_ptr<Material> material);
+				Material * material);
 
 		real_t reflectance;
 };

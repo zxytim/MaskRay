@@ -1,6 +1,6 @@
 /*
  * $File: renderable.hh
- * $Date: Sun Jun 23 20:20:57 2013 +0800
+ * $Date: Mon Jun 24 02:11:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -23,19 +23,19 @@ class Renderable
 		 */
 
 		std::string name;
-		shared_ptr<Geometry> geometry;
-		shared_ptr<SurfaceProperty> surface_property;
-		shared_ptr<TextureMapper> texture_mapper;
-		shared_ptr<Material> material;
+		Geometry * geometry;
+		SurfaceProperty * surface_property;
+		TextureMapper * texture_mapper;
+		Material * material;
 
 		Renderable(std::string name, 
-				shared_ptr<Geometry> geometry,
-				shared_ptr<SurfaceProperty> surface_property,
-				shared_ptr<TextureMapper> texture_mapper = nullptr,
-				shared_ptr<Material> material = nullptr);
+				Geometry * geometry,
+				SurfaceProperty * surface_property,
+				TextureMapper * texture_mapper = nullptr,
+				Material * material = nullptr);
 
 		Ray ray_bounce(const Ray &incident, const Ray &normal);
-		shared_ptr<IntersectInfo> intersect(const Ray &ray);
+		IntersectInfo * intersect(const Ray &ray);
 
 		bool is_emissive() const {
 			return surface_property->is_emissive();
@@ -43,6 +43,7 @@ class Renderable
 
 		int id; // this id is set by scene automatically
 
+		~Renderable();
 };
 
 

@@ -1,6 +1,6 @@
 /*
  * $File: intersect_info.hh
- * $Date: Wed Jun 19 21:35:27 2013 +0800
+ * $Date: Mon Jun 24 03:20:20 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -12,14 +12,14 @@
 class Renderable;
 struct IntersectInfo
 {
-	shared_ptr<GeometryIntersectInfo> intersect_info; // get_dist, get_normal
+	GeometryIntersectInfo * intersect_info; // get_dist, get_normal
 	Renderable *renderable;
 	real_t get_dist();
 	
 	// random by default, which is a Lambertian surface
 	Ray ray_bounce(const Ray &incident);
 
-	virtual ~IntersectInfo(){}
+	virtual ~IntersectInfo();
 };
 
 /**

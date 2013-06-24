@@ -11,7 +11,7 @@ class ChromeSurfaceProperty : public SurfaceProperty
 {
 	public:
 		virtual Ray ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
-				shared_ptr<Material> material);
+				Material * material);
 };
 
 /**

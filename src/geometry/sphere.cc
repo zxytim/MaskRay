@@ -1,13 +1,13 @@
 /*
  * $File: sphere.cc
- * $Date: Wed Jun 19 16:14:47 2013 +0800
+ * $Date: Mon Jun 24 03:18:49 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "geometry/sphere.hh"
 #include "math.hh"
 
-shared_ptr<GeometryIntersectInfo> Sphere::intersect(const Ray &ray)
+GeometryIntersectInfo * Sphere::intersect(const Ray &ray)
 {
 	auto d = ray.o - this->o;
 	real_t b = d.dot(ray.dir);
@@ -22,7 +22,7 @@ shared_ptr<GeometryIntersectInfo> Sphere::intersect(const Ray &ray)
 		return nullptr;
 
 	Vector normal = (ray.o + ray.dir * dist - this->o).normalize();
-	return shared_ptr<GeometryIntersectInfo>(new SphereIntersectInfo(dist, normal));
+	return new SphereIntersectInfo(dist, normal);
 }
 
 /**

@@ -24,7 +24,7 @@ class SphereIntersectInfo : public GeometryIntersectInfo
 class Sphere : public Geometry
 {
 	public:
-		virtual shared_ptr<GeometryIntersectInfo> intersect(const Ray &ray);
+		virtual GeometryIntersectInfo * intersect(const Ray &ray);
 
 	public:
 		Vector o;

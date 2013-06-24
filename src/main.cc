@@ -93,6 +93,7 @@ int main( int argc, char** argv )
 	scene.add_renderable(make_renderable("chrome ball", new Sphere(Vector(-1.1, 2.8, 0), 0.5), new ChromeSurfaceProperty(), new MonoTextureMapper(Intensity(0.8, 0.8, 0.8))));
 #endif
 
+#if 0
 	Mesh *tetrahedron = new Mesh();
 	{
 		real_t s3 = sqrt(3.0);
@@ -101,6 +102,16 @@ int main( int argc, char** argv )
 		tetrahedron->normalize().scale(0.5).translate(-1.0, 2.0, 0);
 	}
 	scene.add_renderable(make_renderable("tetrahedron", tetrahedron, new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.4, 0.4, 0.95))));
+#endif
+
+	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/humanoid_tri.obj");
+	//humanoid_tri->normalize().scale(0.8).translate(-1.0, 1.8, 0.0);
+	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/teapot.obj");
+	humanoid_tri->normalize().scale(0.3).rotate_deg(0, 90).translate(-1.0, 1.8, 0.0);
+	humanoid_tri->finish();
+
+	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(0.2), new MonoTextureMapper(Intensity(0.95, 0.95, 0.95)), new Material(1.5)));
+	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new ChromeSurfaceProperty(), new MonoTextureMapper(Intensity(0.9, 0.95, 0.9)), new Material(1.5)));
 
 #if 0
 	// glowing balls
@@ -149,13 +160,15 @@ int main( int argc, char** argv )
 
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2, 2.6, 1.4625,
-			400, 225);
+			200, 122);
+			//400, 225);
+			//800, 450);
 			//1920, 1080);
 #endif
 
 
 	RayTracer ray_tracer;
-	shared_ptr<Image> image = ray_tracer.render(scene, camera);
+	Image * image = ray_tracer.render(scene, camera);
 	/*
 	printf("1\n");
 	Mat mat = image_to_mat(*image);

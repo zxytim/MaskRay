@@ -1,6 +1,6 @@
 /*
  * $File: emission_property.hh
- * $Date: Wed Jun 19 13:28:20 2013 +0800
+ * $Date: Mon Jun 24 03:18:14 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -19,6 +19,8 @@ class EmissionProperty
 		virtual Intensity get_emission(IntersectInfo &) {
 			return Intensity(0, 0, 0);
 		}
+
+		virtual ~EmissionProperty() {}
 };
 
 /**

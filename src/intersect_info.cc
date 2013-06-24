@@ -1,6 +1,6 @@
 /*
  * $File: intersect_info.cc
- * $Date: Wed Jun 19 13:50:27 2013 +0800
+ * $Date: Mon Jun 24 03:20:35 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -23,6 +23,9 @@ Ray IntersectInfo::ray_bounce(const Ray &incident)
 			renderable->material);
 }
 
+IntersectInfo::~IntersectInfo() {
+	delete intersect_info;
+}
 /**
  * vim: syntax=cpp11 foldmethod=marker
  */

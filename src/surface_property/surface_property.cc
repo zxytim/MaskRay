@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.cc
- * $Date: Wed Jun 19 20:59:31 2013 +0800
+ * $Date: Mon Jun 24 02:47:00 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -9,13 +9,13 @@
 
 #include "math.hh"
 
-SurfaceProperty::SurfaceProperty(shared_ptr<EmissionProperty> emission_property) :
+SurfaceProperty::SurfaceProperty(EmissionProperty * emission_property) :
 	emission_property(emission_property) {
 		if (this->emission_property == nullptr)
-			this->emission_property = shared_ptr<EmissionProperty>(new EmissionProperty());
+			this->emission_property = new EmissionProperty();
 	}
 // Lambertian surface by default
-Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, shared_ptr<Material> material)
+Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, Material * material)
 {
 	Ray ray;
 	Vector &dir = ray.dir;

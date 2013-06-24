@@ -1,12 +1,13 @@
 /*
  * $File: vector.hh
- * $Date: Wed Jun 19 21:51:54 2013 +0800
+ * $Date: Mon Jun 24 04:07:25 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "type.hh"
+#include <xmmintrin.h>
 
 #include <cmath>
 

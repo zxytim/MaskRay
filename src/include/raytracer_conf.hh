@@ -1,6 +1,6 @@
 /*
  * $File: raytracer_conf.hh
- * $Date: Wed Jun 19 23:04:56 2013 +0800
+ * $Date: Mon Jun 24 05:10:54 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -16,7 +16,7 @@ class RayTracerConf
 
 		RayTracerConf() :
 			STOP_ENERGY_THRESHOLD(0.01),
-			TRACE_DEPTH_MAX(10)
+			TRACE_DEPTH_MAX(15)
 		{}
 };
 

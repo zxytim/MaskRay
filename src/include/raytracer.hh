@@ -15,7 +15,7 @@
 class RayTracer
 {
 	public:
-		shared_ptr<Image> render(Scene &scene, Camera &camera);
+		Image * render(Scene &scene, Camera &camera);
 
 	protected:
 
@@ -32,7 +32,7 @@ class RayTracer
 		Intensity trace(const Ray &ray);
 		Intensity do_trace(const Ray &ray, int depth);
 
-		shared_ptr<IntersectInfo> get_closest_intersection(const Ray &ray);
+		IntersectInfo * get_closest_intersection(const Ray &ray);
 		void iterate(Camera &camera);
 };
 

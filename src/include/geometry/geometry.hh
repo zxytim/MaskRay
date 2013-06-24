@@ -1,6 +1,6 @@
 /*
  * $File: geometry.hh
- * $Date: Sun Jun 23 20:13:02 2013 +0800
+ * $Date: Mon Jun 24 08:29:22 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -16,6 +16,7 @@ class GeometryIntersectInfo
 	public:
 		virtual real_t get_dist() = 0;
 		virtual Vector get_normal() = 0;
+		virtual ~GeometryIntersectInfo() {}
 };
 
 class Geometry
@@ -24,10 +25,9 @@ class Geometry
 		virtual bool is_finite() const {
 			return false;
 		}
-		virtual bool is_emissive() const {
-			return false;
-		}
-		virtual std::shared_ptr<GeometryIntersectInfo> intersect(const Ray &ray) = 0;
+		virtual void get_shape(real_t *x, real_t *y, real_t *z);
+		virtual GeometryIntersectInfo * intersect(const Ray &ray) = 0;
+		virtual ~Geometry() {}
 };
 
 /**

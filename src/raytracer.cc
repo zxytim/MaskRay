@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Mon Jun 24 01:41:34 2013 +0800
+ * $Date: Mon Jun 24 21:36:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -27,7 +27,7 @@ Image* image_show;
 int phase;
 
 bool still_iterate;
-int N_ITER_MAX = 100000;
+int N_ITER_MAX = 12;
 
 real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
 Intensity clamp(const Intensity &i) {
@@ -39,13 +39,18 @@ Color clamp(const Color &i) {
 }
 void RayTracer::iterate(Camera &camera)
 {
+	printf("a thread is stared.\n");
 	static std::mutex lock;
-	shared_ptr<Image> image(new Image(camera.resol_x, camera.resol_y));
+	Image * image(new Image(camera.resol_x, camera.resol_y));
 	while (still_iterate) {
 		Color *image_data = image->data;
 		for (int i = 0; i < camera.resol_x; i ++)
 			//#pragma omp parallel for 
 			for (int j = 0; j < camera.resol_y; j ++) {
+				if (!still_iterate) {
+					delete image;
+					return;
+				}
 				Ray ray = camera.emit_ray(i, j);
 				Color color = intensity_to_color(trace(ray));
 				*image_data = color; //Color(clamp(color.r), clamp(color.g), clamp(color.b));
@@ -54,7 +59,6 @@ void RayTracer::iterate(Camera &camera)
 
 		lock.lock();
 
-		phase += 1;
 		printf("phase %3d ...\r", phase);
 		fflush(stdout);
 
@@ -63,13 +67,13 @@ void RayTracer::iterate(Camera &camera)
 		for (int i = 0; i < camera.resol_x; i ++)
 			for (int j = 0; j < camera.resol_y; j ++)
 				*(acc ++) += *(ptr ++);
-		if ((phase & 3) || phase == N_ITER_MAX)
+		if (1 || (phase & 3) == 0 || phase == N_ITER_MAX - 1)
 		{
 			acc = image_accum->data;
 			Color *image_show_data = image_show->data;
 			for (int i = 0; i < camera.resol_x; i ++)
 				for (int j = 0; j < camera.resol_y; j ++) {
-					*image_show_data = *acc/ phase;
+					*image_show_data = *acc/ (phase + 1);
 					image_show_data ++;
 					acc ++;
 				}
@@ -77,14 +81,19 @@ void RayTracer::iterate(Camera &camera)
 			cv::imshow("process", mat);
 			cv::imwrite("output-mid.png", mat);
 			cv::waitKey(1);
-			if (phase == N_ITER_MAX)
-				still_iterate = false;
 		}
+
+		if (phase == N_ITER_MAX - 1)
+			still_iterate = false;
+		phase += 1;
+
 		lock.unlock();
 	}
+
+	delete image;
 }
 
-shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
+Image * RayTracer::render(Scene &scene, Camera &camera)
 {
 	this->scene = &scene;
 	image_show = (new Image(camera.resol_x, camera.resol_y));
@@ -101,6 +110,8 @@ shared_ptr<Image> RayTracer::render(Scene &scene, Camera &camera)
 		threads[i].join();
 
 	delete [] threads;
+	delete image_show;
+	delete image_accum;
 	return nullptr;
 }
 
@@ -110,10 +121,10 @@ Intensity RayTracer::trace(const Ray &ray)
 }
 
 
-shared_ptr<IntersectInfo> RayTracer::get_closest_intersection(const Ray &ray)
+IntersectInfo * RayTracer::get_closest_intersection(const Ray &ray)
 {
 	real_t min_dist = 1e100;
-	shared_ptr<IntersectInfo> ii = nullptr;
+	IntersectInfo * ii = nullptr;
 
 	for (auto renderable: scene->renderable) {
 		auto rst = renderable->intersect(ray);
@@ -123,8 +134,10 @@ shared_ptr<IntersectInfo> RayTracer::get_closest_intersection(const Ray &ray)
 		if (dist < min_dist)
 		{
 			min_dist = dist;
+			if (ii) delete ii;
 			ii = rst;
 		}
+		else delete rst;
 	}
 
 	return ii;
@@ -132,18 +145,21 @@ shared_ptr<IntersectInfo> RayTracer::get_closest_intersection(const Ray &ray)
 
 Intensity RayTracer::do_trace(const Ray &incident, int depth)
 {
-
-	auto inter = get_closest_intersection(incident);
-	if (inter == nullptr)
+	IntersectInfo *inter = get_closest_intersection(incident);
+	if (inter == nullptr) {
+		delete inter;
 		return Intensity(0, 0, 0); // black
+	}
 
 	Renderable *renderable = inter->renderable;
 
 	Intensity texture = renderable->texture_mapper->get_texture(*inter);
 	Intensity emission = renderable->surface_property->get_emission(*inter);
 
-	if (incident.energy < conf.STOP_ENERGY_THRESHOLD || depth == 0)
+	if (incident.energy < conf.STOP_ENERGY_THRESHOLD || depth == 0) {
+		delete inter;
 		return emission;
+	}
 
 #if 0
 	// Russian Roulette
@@ -166,6 +182,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	ret = ret + emission;
 
 	// FIXME: energy not used
+	delete inter;
 	return ret;
 
 	// TODO:

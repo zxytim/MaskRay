@@ -1,6 +1,6 @@
 /*
  * $File: texture_mapper.hh
- * $Date: Wed Jun 19 11:44:47 2013 +0800
+ * $Date: Mon Jun 24 03:19:50 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -15,6 +15,7 @@ class TextureMapper
 {
 	public:
 		virtual Intensity get_texture(IntersectInfo &intersect_info) = 0;
+		virtual ~TextureMapper() {}
 };
 
 /**

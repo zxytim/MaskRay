@@ -1,6 +1,6 @@
 /*
  * $File: image.hh
- * $Date: Mon Jun 17 19:50:13 2013 +0800
+ * $Date: Mon Jun 24 03:38:47 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -19,6 +19,9 @@ class Image
 				data = new Color[size()];
 			}
 
+		~Image () {
+			delete [] data;
+		}
 		inline int size() const { return width * height; }
 };
 

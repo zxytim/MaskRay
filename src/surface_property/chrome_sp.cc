@@ -10,7 +10,7 @@
 #include <cassert>
 
 Ray ChromeSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
-		shared_ptr<Material> material) {
+		Material * material) {
 
 	assert(le(normal.lengthsqr(), 1.0));
 	assert(le(incident.dir.lengthsqr(), 1.0));

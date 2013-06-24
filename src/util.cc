@@ -1,6 +1,6 @@
 /*
  * $File: util.cc
- * $Date: Thu Jun 20 01:35:17 2013 +0800
+ * $Date: Mon Jun 24 03:17:26 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -40,17 +40,17 @@ Renderable *make_renderable(std::string name,
 		TextureMapper *texture_mapper,
 		Material *material)
 {
-	shared_ptr<TextureMapper> tm(texture_mapper);
+	TextureMapper * tm(texture_mapper);
 	if (texture_mapper == NULL)
-		tm = shared_ptr<TextureMapper>(new MonoTextureMapper(Intensity(0.5, 0.5, 0.5)));
-	shared_ptr<Material> mtrl(material);
+		tm = (new MonoTextureMapper(Intensity(0.5, 0.5, 0.5)));
+	Material * mtrl(material);
 	if (material == NULL)
-		mtrl = shared_ptr<Material>(new Material(1.0));
+		mtrl = (new Material(1.0));
 
 	return new Renderable(
 			name,
-			shared_ptr<Geometry>(geometry),
-			shared_ptr<SurfaceProperty>(surface_property),
+			geometry,
+			surface_property,
 			tm, mtrl);
 }
 

@@ -1,6 +1,6 @@
 #
 # $File: Makefile
-# $Date: Mon Jun 24 01:30:21 2013 +0800
+# $Date: Mon Jun 24 21:41:02 2013 +0800
 #
 # A single output portable Makefile for
 # simple c++ project
@@ -15,7 +15,7 @@ INCLUDE_DIR = -I src/include
 DEFINES = -D__DEBUG_BUILD
 
 
-CXXFLAGS += -g -O0 #-pg
+CXXFLAGS += -O3 #-g -O0 #-pg
 CXXFLAGS += #$(DEFINES)
 CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall -Wextra 
@@ -26,7 +26,7 @@ CXXFLAGS += -fopenmp
 LDFLAGS = 
 
 CXX = g++
-CXXSOURCES = $(shell find . -name "*.cc")
+CXXSOURCES = $(shell find src/ -name "*.cc")
 OBJS = $(addprefix $(OBJ_DIR)/,$(CXXSOURCES:.cc=.o))
 DEPFILES = $(OBJS:.o=.d)
 
