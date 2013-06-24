@@ -1,10 +1,26 @@
-MaskRay
-=======
-
-A proof-of-concept experimental global illumination raytracer
+MaskRay is a proof-of-concept raytracer.
 
 Features
 --------
+- path traced global illumination
+- kd-tree speed up
+- arbitrary BRDF, even BSSRDF
 
-- Path tracing
-- arbitrary BRDF(BSSRDF)
+Repository
+----------
+https://github.com/zxytim/MaskRay
+
+Screenshots
+-----------
+<img class="screenshots" src="http://static.zxytim.com/cg/0-lambertian.png" alt="A first image with Lambertian surface">
+<img class="screenshots" src="http://static.zxytim.com/cg/1-reflect-refract-simple-caustic.png" alt="reflect and refract, simple caustic">
+<img class="screenshots" src="http://static.zxytim.com/cg/3-evident-caustic.png" alt="an evident caustic. small light source causes more noise">
+<img class="screenshots" src="http://static.zxytim.com/cg/4-humanoid.png" alt="a humanoid mesh">
+
+TODOs
+-----
+- kd-tree with SAH splition
+- more BRDFs
+- Metropolis Light Transport
+- Photon Map
+
