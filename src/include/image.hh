@@ -1,12 +1,13 @@
 /*
  * $File: image.hh
- * $Date: Mon Jun 24 03:38:47 2013 +0800
+ * $Date: Tue Jun 25 02:03:19 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "color.hh"
+#include <cstring>
 
 class Image
 {
@@ -17,6 +18,7 @@ class Image
 		Image(int width, int height) :
 			width(width), height(height) {
 				data = new Color[size()];
+				memset(data, 0, sizeof(data[0]) * size());
 			}
 
 		~Image () {

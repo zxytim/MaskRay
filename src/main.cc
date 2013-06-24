@@ -106,12 +106,14 @@ int main( int argc, char** argv )
 
 	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/humanoid_tri.obj");
 	//humanoid_tri->normalize().scale(0.8).translate(-1.0, 1.8, 0.0);
-	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/teapot.obj");
+	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/test_data/horse.fine.90k.obj");
+	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/teapot.obj");
+	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
 	humanoid_tri->normalize().scale(0.3).rotate_deg(0, 90).translate(-1.0, 1.8, 0.0);
 	humanoid_tri->finish();
 
 	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(0.2), new MonoTextureMapper(Intensity(0.95, 0.95, 0.95)), new Material(1.5)));
-	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new ChromeSurfaceProperty(), new MonoTextureMapper(Intensity(0.9, 0.95, 0.9)), new Material(1.5)));
+	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.9, 0.95, 0.9)), new Material(1.5)));
 
 #if 0
 	// glowing balls
@@ -155,13 +157,13 @@ int main( int argc, char** argv )
 	//scene.add_renderable(make_renderable("top", new Sphere(Vector(0, 0, 10e6), 10e6-2.5), new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.0, 0.0, 0.0)))); // Intensity(1.6, 1.47, 1.29)
 	scene.add_renderable(make_renderable("top", new Sphere(Vector(0, 0, 10e6), 10e6-2.5), new MonoGlowingLambertianSurfaceProperty(Intensity(1.6, 1.47, 1.29)), new MonoTextureMapper(Intensity(0.0, 0.0, 0.0))));
 	// front
-	scene.add_renderable(make_renderable("front", new Sphere(Vector(0.0, -10e6, 0), 10e6-2.5), new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(1.5, 1.5, 1.5))));
+	//scene.add_renderable(make_renderable("front", new Sphere(Vector(0.0, -10e6, 0), 10e6-2.5), new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(1.5, 1.5, 1.5))));
 #endif
 
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2, 2.6, 1.4625,
-			200, 122);
-			//400, 225);
+			//200, 122);
+			400, 225);
 			//800, 450);
 			//1920, 1080);
 #endif

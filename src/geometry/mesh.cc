@@ -1,6 +1,6 @@
 /*
  * $File: mesh.cc
- * $Date: Mon Jun 24 21:37:57 2013 +0800
+ * $Date: Tue Jun 25 01:06:11 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -29,6 +29,7 @@ GeometryIntersectInfo * Mesh::intersect(const Ray &ray) {
 		assert(((ptr0 == nullptr) ^ (ptr1 == nullptr)) == 0);
 		if (ptr0)
 			assert(fabs(ptr0->get_dist() - ptr1->get_dist()) < EPS);
+		return ptr0;
 #endif
 		return kdtree_intersect(ray);
 	}

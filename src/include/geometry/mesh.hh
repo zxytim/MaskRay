@@ -1,6 +1,6 @@
 /*
  * $File: mesh.hh
- * $Date: Mon Jun 24 21:45:24 2013 +0800
+ * $Date: Tue Jun 25 01:24:12 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -25,7 +25,7 @@ struct MeshConf
 	int use_kdtree;
 
 	MeshConf() : 
-		use_kdtree(0)
+		use_kdtree(2)
 	{}
 };
 

@@ -1,6 +1,6 @@
 /*
  * $File: util.cc
- * $Date: Mon Jun 24 03:17:26 2013 +0800
+ * $Date: Tue Jun 25 01:54:16 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -18,9 +18,16 @@ Mat image_to_mat(const Image &image)
 	for (int i = 0; i < mat.rows; i ++) {
 		uchar *p = mat.ptr<uchar>(i);
 		for (int j = 0; j < mat.cols; j ++) {
-			p[0] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].b * 255);
-			p[1] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].g * 255);
-			p[2] = std::min(255.0, data[(image.width - 1 - j) * image.height + (image.height - i)].r * 255);
+			assert(j < image.width);
+			assert(i < image.height);
+			int index = (image.width - 1 - j) * image.height + (image.height - 1 - i);
+			assert(index < image.size());
+			assert(data[index].b >= 0);
+			assert(data[index].g >= 0);
+			assert(data[index].r >= 0);
+			p[0] = std::min(255.0, data[index].b * 255);
+			p[1] = std::min(255.0, data[index].g * 255);
+			p[2] = std::min(255.0, data[index].r * 255);
 
 #if 0
 			p[0] = std::min(255.0, pow(data[(image.width - 1 - j) * image.height + (image.height - i)].b, 1 / 2.2) * 255 + 0.5);

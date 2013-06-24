@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Mon Jun 24 21:36:47 2013 +0800
+ * $Date: Tue Jun 25 02:03:42 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -27,7 +27,7 @@ Image* image_show;
 int phase;
 
 bool still_iterate;
-int N_ITER_MAX = 12;
+int N_ITER_MAX = 100000;
 
 real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
 Intensity clamp(const Intensity &i) {
@@ -37,6 +37,8 @@ Intensity clamp(const Intensity &i) {
 Color clamp(const Color &i) {
 	return Color(clamp(i.r), clamp(i.g), clamp(i.b));
 }
+
+
 void RayTracer::iterate(Camera &camera)
 {
 	printf("a thread is stared.\n");
@@ -53,7 +55,7 @@ void RayTracer::iterate(Camera &camera)
 				}
 				Ray ray = camera.emit_ray(i, j);
 				Color color = intensity_to_color(trace(ray));
-				*image_data = color; //Color(clamp(color.r), clamp(color.g), clamp(color.b));
+				*image_data = color; 
 				image_data ++;
 			}
 
@@ -77,6 +79,7 @@ void RayTracer::iterate(Camera &camera)
 					image_show_data ++;
 					acc ++;
 				}
+			assert(image_show_data == image_show->data + image_show->size());
 			cv::Mat mat = image_to_mat(*image_show);
 			cv::imshow("process", mat);
 			cv::imwrite("output-mid.png", mat);
