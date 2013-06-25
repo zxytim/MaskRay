@@ -1,6 +1,6 @@
 /*
  * $File: camera.cc
- * $Date: Thu Jun 20 14:54:19 2013 +0800
+ * $Date: Tue Jun 25 03:36:50 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -26,7 +26,8 @@ Ray Camera::emit_ray(int x, int y)
 	Vector screen_pos = screen_center + left * o_x + up * o_y;
 
 	Vector dir = (screen_pos - eye).normalize();
-	//printf("(%lf, %lf, %lf)\n", dir.x, dir.y, dir.z);
+	//printf("o(%lf, %lf, %lf)\n", screen_pos.x, screen_pos.y, screen_pos.z);
+	//printf("d(%lf, %lf, %lf)\n", dir.x, dir.y, dir.z);
 	//return Ray(screen_pos, dir);
 	return Ray(eye, dir);
 }

@@ -16,10 +16,11 @@ Screenshots
 <img class="screenshots" src="http://static.zxytim.com/cg/1-reflect-refract-simple-caustic.png" alt="reflect and refract, simple caustic">
 <img class="screenshots" src="http://static.zxytim.com/cg/3-evident-caustic.png" alt="an evident caustic. small light source causes more noise">
 <img class="screenshots" src="http://static.zxytim.com/cg/4-humanoid.png" alt="a humanoid mesh">
+<img class="screenshots" src="http://static.zxytim.com/cg/7-glass-dragon-1280x720.png" alt="glass dragon, rendered with kd-tree">
 
 TODOs
 -----
-- kd-tree with SAH splition
+- SAH-based kd-tree
 - more BRDFs
 - Metropolis Light Transport
 - Photon Map

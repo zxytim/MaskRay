@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.cc
- * $Date: Mon Jun 24 21:34:14 2013 +0800
+ * $Date: Tue Jun 25 03:46:24 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -273,6 +273,9 @@ GeometryIntersectInfo *KDTree::do_intersect(Node *root, const Ray &ray)
 
 GeometryIntersectInfo *KDTree::intersect(const Ray &ray)
 {
+	real_t t = root->aabb.intersect(ray);
+	if (t < EPS)
+		return nullptr;
 	return do_intersect(root, ray);
 }
 
