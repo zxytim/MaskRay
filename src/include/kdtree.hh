@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.hh
- * $Date: Tue Jun 25 21:22:38 2013 +0800
+ * $Date: Wed Jun 26 23:35:21 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 

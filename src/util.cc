@@ -1,12 +1,13 @@
 /*
  * $File: util.cc
- * $Date: Tue Jun 25 01:54:16 2013 +0800
+ * $Date: Wed Jun 26 23:26:52 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "util.hh"
 #include <algorithm>
 #include <sstream>
+#include <sys/time.h>
 
 using namespace cv;
 
@@ -77,6 +78,12 @@ Renderable *make_renderable_noname(
 	return make_renderable(name, geometry, surface_property, texture_mapper, material);
 }
 
+
+long long get_time() {
+	timeval tv;
+	gettimeofday(&tv, 0);
+	return tv.tv_sec * 1000ll + tv.tv_usec / 1000;
+}
 /**
  * vim: syntax=cpp11 foldmethod=marker
  */

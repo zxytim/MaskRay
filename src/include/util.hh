@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Wed Jun 19 21:34:47 2013 +0800
+ * $Date: Wed Jun 26 23:26:36 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -32,6 +32,9 @@ Renderable *make_renderable_noname(
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper = NULL,
 		Material *material = NULL);
+
+long long get_time();
+
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

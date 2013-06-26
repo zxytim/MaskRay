@@ -1,10 +1,11 @@
 /*
  * $File: kdtree.cc
- * $Date: Tue Jun 25 22:49:29 2013 +0800
+ * $Date: Wed Jun 26 23:35:17 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "kdtree.hh"
+#include "util.hh"
 
 real_t *KDTree::AABB::get_data(int axis) {
 	if (axis == 0)
@@ -164,19 +165,26 @@ GeometryIntersectInfo *KDTree::Node::intersect(const Ray &ray)
 
 void KDTree::build_tree(std::vector<Geometry *> primitive)
 {
-	std::vector<AABB> aabb;
-	for (size_t i = 0; i < primitive.size(); i ++) {
-		Geometry *p = primitive[i];
-		assert(p->is_finite());
+	long long start_time = get_time();
+	{
 
-		real_t x[2], y[2], z[2];
-		p->get_shape(x, y, z);
-		AABB ab = AABB(x, y, z);
-		ab.id = i;
-		aabb.push_back(ab);
+		std::vector<AABB> aabb;
+		for (size_t i = 0; i < primitive.size(); i ++) {
+			Geometry *p = primitive[i];
+			assert(p->is_finite());
+
+			real_t x[2], y[2], z[2];
+			p->get_shape(x, y, z);
+			AABB ab = AABB(x, y, z);
+			ab.id = i;
+			aabb.push_back(ab);
+		}
+		this->primitive = primitive;
+		root = do_build_tree(aabb, merge_aabb(aabb), 0);
 	}
-	this->primitive = primitive;
-	root = do_build_tree(aabb, merge_aabb(aabb), 0);
+	long long end_time = get_time();
+	
+	printf("kd-tree build time: %lldms\n", end_time - start_time);
 }
 
 #include "geometry/mesh.hh"
@@ -233,18 +241,6 @@ KDTree::Node *KDTree::do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aa
 	root->ch[1] = do_build_tree(right, aabb_right, depth + 1);
 	return root;
 
-#if 0
-	std::vector<int> index(aabb.size());
-	for (size_t i = 0; i < index.size(); i ++) index[i] = i;
-	std::sort(index.begin(), index.end(), [&](int i, int j) -> bool {
-			AABB &a = aabb[i], &b = aabb[j];
-			int min_a = a.get_coord_min(axis_to_split),
-			min_b = b.get_coord_min(axis_to_split);
-			if (min_a != min_b) return min_a < min_b;
-			return a.get_coord_max(axis_to_split)
-			< b.get_coord_max(axis_to_split);
-			});
-#endif
 }
 
 GeometryIntersectInfo *KDTree::do_intersect(Node *root, const Ray &ray)

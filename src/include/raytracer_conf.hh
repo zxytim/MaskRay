@@ -1,6 +1,6 @@
 /*
  * $File: raytracer_conf.hh
- * $Date: Wed Jun 26 15:08:26 2013 +0800
+ * $Date: Wed Jun 26 23:17:56 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -25,8 +25,8 @@ class RayTracerConf
 		RayTracerConf() :
 			STOP_ENERGY_THRESHOLD(0.01),
 			TRACE_DEPTH_MAX(15),
-			N_THREDED_WORKER(1),
-			N_ITER(4),
+			N_THREDED_WORKER(8),
+			N_ITER(12),
 			N_ITER_WRITE_IMAGE(2),
 			IMAGE_NAME("output-mid"),
 			IMAGE_FORMAT("png")

@@ -1,6 +1,6 @@
 /*
  * $File: mesh.cc
- * $Date: Tue Jun 25 21:26:31 2013 +0800
+ * $Date: Wed Jun 26 23:28:46 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -100,7 +100,6 @@ GeometryIntersectInfo * Mesh::brute_force_intersect(const Ray &ray)
 
 void Mesh::finish() {
 	if (conf.use_kdtree) {
-		printf("building kdtree\n");
 		build_kdtree();
 	}
 }

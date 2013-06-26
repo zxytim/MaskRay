@@ -1,5 +1,3 @@
-#include <cv.h>
-#include <highgui.h>
 
 #include <iostream>
 #include <string>
@@ -171,8 +169,8 @@ int main( int argc, char** argv )
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2, 2.6, 1.4625,
 			//200, 122);
-			400, 225);
-			//800, 450);
+			//400, 225);
+			800, 450);
 			//1920, 1080);
 #endif
 
@@ -215,7 +213,8 @@ int main( int argc, char** argv )
 
 	RayTracer ray_tracer;
 	Image *image = ray_tracer.render(scene, camera);
-	delete image;
+	if (image)
+		delete image;
 	/*
 	printf("1\n");
 	Mat mat = image_to_mat(*image);

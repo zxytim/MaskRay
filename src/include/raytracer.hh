@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.hh
- * $Date: Wed Jun 26 18:01:48 2013 +0800
+ * $Date: Wed Jun 26 23:16:57 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -19,7 +19,7 @@ class RayTracer
 	public:
 		Image * render(Scene &scene, Camera &camera);
 
-	protected:
+	//protected:
 
 		/*
 		 * Intermediate variable
@@ -40,7 +40,7 @@ class RayTracer
 			public:
 				bool working;
 				// accumulatively add intensity to image
-				ThreadTaskScheduler(Camera &camera, Image *image, int n_ray_cast = 100);
+				ThreadTaskScheduler(Camera &camera, Image *image, int n_ray_cast = 50);
 
 				int fetch_task(std::vector<Ray> &task); // return task_id
 				void report_task(const std::vector<Intensity> &intensity, int tid);

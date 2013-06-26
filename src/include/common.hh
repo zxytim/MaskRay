@@ -1,6 +1,6 @@
 /*
  * $File: common.hh
- * $Date: Tue Jun 18 22:57:36 2013 +0800
+ * $Date: Wed Jun 26 23:26:38 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -17,6 +17,11 @@
 #include "scene.hh"
 #include "raytracer.hh"
 #include "camera.hh"
+
+#include <cv.h>
+#include <highgui.h>
+
+#include <sys/time.h>
 
 using cv::Mat;
 using cv::namedWindow;
