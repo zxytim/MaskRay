@@ -1,6 +1,6 @@
 /*
  * $File: raytracer_conf.hh
- * $Date: Wed Jun 26 14:11:09 2013 +0800
+ * $Date: Wed Jun 26 15:08:26 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 

@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Wed Jun 26 14:11:27 2013 +0800
+ * $Date: Wed Jun 26 18:31:41 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -105,6 +105,18 @@ RayTracer::ThreadTaskScheduler::ThreadTaskScheduler(Camera &camera, Image *image
 }
 
 void RayTracer::naive_worker(Camera &camera, Image *image) {
+
+	printf("naive worker\n");
+#if 1
+	printf("brute force\n");
+	// force
+	for (int i = 0; i < image->width; i ++)
+		for (int j = 0; j < image->height; j ++) {
+			image->data[i * image->height + j] += intensity_to_color(trace(camera.emit_ray(i, j)));
+		}
+	return;
+#endif
+
 	static std::mutex lock;
 	int size = image->size();
 	while (naive_worker_working) {
@@ -133,8 +145,17 @@ void RayTracer::iterate(Camera &camera, Image *image)
 	if (nworker == -1)
 		nworker = 4;
 
-
 #if 0
+	// force
+	for (int i = 0; i < image->width; i ++)
+		for (int j = 0; j < image->height; j ++) {
+			image->data[i * image->height + j] += intensity_to_color(trace(camera.emit_ray(i, j)));
+		}
+	return;
+#endif
+
+#if 1
+	// naive worker
 	auto threads = new std::thread[nworker];
 
 	naive_worker_working = true;
@@ -153,13 +174,6 @@ void RayTracer::iterate(Camera &camera, Image *image)
 #endif
 
 #if 0
-	// force
-	for (int i = 0; i < image->width; i ++)
-		for (int j = 0; j < image->height; j ++) {
-			image->data[i * image->height + j] += intensity_to_color(trace(camera.emit_ray(i, j)));
-		}
-	return;
-#endif
 
 	auto threads = new std::thread[nworker];
 	ThreadTaskScheduler *tts = new ThreadTaskScheduler(camera, image);
@@ -173,6 +187,8 @@ void RayTracer::iterate(Camera &camera, Image *image)
 
 	delete [] threads;
 	delete tts;
+	return;
+#endif
 }
 
 static long long get_time() {

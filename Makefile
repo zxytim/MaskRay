@@ -1,6 +1,6 @@
 #
 # $File: Makefile
-# $Date: Wed Jun 26 14:06:27 2013 +0800
+# $Date: Wed Jun 26 15:09:59 2013 +0800
 #
 # A single output portable Makefile for
 # simple c++ project
@@ -23,6 +23,8 @@ CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall -Wextra 
 CXXFLAGS += $(INCLUDE_DIR)
 CXXFLAGS += $(shell pkg-config --libs --cflags opencv)
+CXXFLAGS += -pthread
+#CXXFLAGS += -lpthread
 CXXFLAGS += -fopenmp
 
 LDFLAGS = 

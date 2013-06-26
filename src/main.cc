@@ -116,7 +116,7 @@ int main( int argc, char** argv )
 	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(0.2), new MonoTextureMapper(Intensity(0.95, 0.95, 0.95)), new Material(1.5)));
 	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.8, 0.95, 0.95)), new Material(1.5)));
 
-#if 0
+#if 1
 	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
 	humanoid_tri->normalize().scale(0.4).rotate_deg(0, 90).translate(-0.1, 1.4, 0.0);
 	humanoid_tri->finish();
