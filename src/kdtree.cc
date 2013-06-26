@@ -1,11 +1,15 @@
 /*
  * $File: kdtree.cc
- * $Date: Wed Jun 26 23:35:17 2013 +0800
+ * $Date: Thu Jun 27 03:04:27 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "kdtree.hh"
 #include "util.hh"
+
+#include <iostream>
+
+using namespace std;
 
 real_t *KDTree::AABB::get_data(int axis) {
 	if (axis == 0)
@@ -112,7 +116,7 @@ void KDTree::AABB::get_coord_range(int axis, real_t &min_coord, real_t &max_coor
 		min_coord = z[0], max_coord = z[1];
 }
 
-real_t KDTree::AABB::get_coord_min(int axis)
+real_t KDTree::AABB::get_coord_min(int axis) const
 {
 	if (axis == 0)
 		return x[0];
@@ -121,7 +125,7 @@ real_t KDTree::AABB::get_coord_min(int axis)
 	else return z[0];
 }
 
-real_t KDTree::AABB::get_coord_max(int axis)
+real_t KDTree::AABB::get_coord_max(int axis) const
 {
 	if (axis == 0)
 		return x[1];
@@ -165,6 +169,7 @@ GeometryIntersectInfo *KDTree::Node::intersect(const Ray &ray)
 
 void KDTree::build_tree(std::vector<Geometry *> primitive)
 {
+	printf("start building kd-tree ...\n"); fflush(stdout);
 	long long start_time = get_time();
 	{
 
@@ -184,7 +189,8 @@ void KDTree::build_tree(std::vector<Geometry *> primitive)
 	}
 	long long end_time = get_time();
 	
-	printf("kd-tree build time: %lldms\n", end_time - start_time);
+	printf("kd-tree build time: %lldms\n", end_time - start_time); fflush(stdout);
+	print_stats();
 }
 
 #include "geometry/mesh.hh"
@@ -213,35 +219,160 @@ KDTree::Node *KDTree::do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aa
 	root->aabb_ray_test = merge_aabb(aabb);
 	root->aabb_ray_test.intersect(tree_aabb);
 	root->aabb = tree_aabb;
-	if (aabb.size() < 5 || depth == 25) {
+	if (aabb.size() < 15 || depth == 40) {
 		for (auto &ab: aabb)
 			root->primitive.push_back(primitive[ab.id]);
-		//root->insepct();
 		return root;
 	}
 
+#if 1
 	int axis_to_split = depth % 3;
 	root->split_axis = axis_to_split;
 	root->split_coord = 
 		(root->aabb.get_coord_min(axis_to_split) +
 		 root->aabb.get_coord_max(axis_to_split)) * 0.5;
+#else
+	real_t min_cost = 1e100;
+	for (int axis = 0; axis < 3; axis ++) {
+		real_t splt_crd;
+		real_t cost = split_cost(axis, aabb, tree_aabb, depth, splt_crd);
+		if (cost < min_cost) {
+			min_cost = cost;
+			root->split_axis = axis;
+			root->split_coord = splt_crd;
+
+			assert(tree_aabb.get_coord_min(axis) <= splt_crd);
+			assert(tree_aabb.get_coord_max(axis) >= splt_crd);
+		}
+	}
+
+	if (min_cost > 1e99) {
+		for (auto &ab: aabb)
+			root->primitive.push_back(primitive[ab.id]);
+		return root;
+	}
+#endif
+
 	std::vector<AABB> left, right;
+
 	for (auto &ab: aabb) {
-		if (ab.get_coord_min(axis_to_split) < root->split_coord + EPS)
+		if (ab.get_coord_min(root->split_axis) < root->split_coord + EPS)
 			left.push_back(ab);
-		if (ab.get_coord_max(axis_to_split) > root->split_coord - EPS)
+		if (ab.get_coord_max(root->split_axis) > root->split_coord - EPS)
 			right.push_back(ab);
 	}
 
+
 	AABB aabb_left = tree_aabb,
 		 aabb_right = tree_aabb;
-	aabb_left.modify(axis_to_split, 1, root->split_coord);
-	aabb_right.modify(axis_to_split, 0, root->split_coord);
+
+	aabb_left.modify(root->split_axis, 1, root->split_coord);
+	aabb_right.modify(root->split_axis, 0, root->split_coord);
+
 	root->ch[0] = do_build_tree(left, aabb_left, depth + 1);
 	root->ch[1] = do_build_tree(right, aabb_right, depth + 1);
 	return root;
-
 }
+
+real_t KDTree::split_cost(int axis, const std::vector<AABB> &aabb, const AABB
+		&tree_aabb, int , real_t &split_coord) {
+	// Surface Area Heuristic (SAH)
+
+	if (aabb.size() <= 1)
+		return 1e100;
+
+	struct Coord {
+		real_t pos;
+		int type; // -1 or 1;
+		Coord(real_t pos, int type) :
+			pos(pos), type(type) {}
+	};
+
+	std::vector<Coord> coord;
+	for (size_t i = 0; i < aabb.size(); i ++) {
+		const AABB &ab = aabb[i];
+		coord.push_back(Coord(ab.get_coord_min(axis), 1));
+		coord.push_back(Coord(ab.get_coord_max(axis), -1));
+	}
+
+	sort(coord.begin(), coord.end(), [](const Coord &a, const Coord &b) -> bool{
+			if (fabs(a.pos - b.pos) > EPS) return a.pos < b.pos;
+			return a.type < b.type;
+			});
+
+	struct CoordPro {
+		real_t pos;
+		int n_in,
+			n_out;
+		CoordPro(real_t pos, int n_in, int n_out) :
+			pos(pos), n_in(n_in), n_out(n_out) {}
+	}; 
+
+	std::vector<CoordPro> coord_pro;
+	for (size_t i = 0; i < coord.size(); ) {
+		size_t j = i;
+		CoordPro cp(coord[i].pos, 0, 0);
+		while (j < coord.size() && fabs(coord[j].pos - coord[i].pos) < EPS) {
+			if (coord[j].type == 1)
+				cp.n_in ++;
+			else cp.n_out ++;
+			j ++;
+		}
+		coord_pro.push_back(cp);
+		i = j;
+	}
+	
+
+	int axis_y = (axis + 1) % 3,
+		axis_z = (axis + 2) % 3;
+	real_t a = tree_aabb.get_length(axis),
+		   b = tree_aabb.get_length(axis_y),
+		   c = tree_aabb.get_length(axis_z);
+	real_t s = a * b + b * c + c * a;
+
+	real_t min_cost = 1e100;
+
+	int nl = 0, nr = aabb.size();
+	int nl_min, nr_min;
+
+	real_t coord_low = tree_aabb.get_coord_min(axis),
+		   coord_high = tree_aabb.get_coord_max(axis);
+
+	for (size_t i = 1; i < coord_pro.size(); i ++) {
+		CoordPro &cp0 = coord_pro[i - 1],
+				 &cp1 = coord_pro[i];
+		real_t splt_crd = (cp1.pos + cp0.pos) * 0.5;
+		nl = nl + cp0.n_in;
+		nr = nr - cp0.n_out;
+
+		if (splt_crd < coord_low || splt_crd > coord_high)
+			continue;
+
+		real_t al = splt_crd - coord_low,
+			   ar = a - al;
+		
+		real_t sl = al * b + al * c + b * c,
+			   sr = ar * b + ar * c + b * c;
+
+		real_t cost = sl / s * nl + sr / s * nr;
+
+		if (cost < min_cost) {
+			min_cost = cost;
+			split_coord = splt_crd;
+			nl_min = nl;
+			nr_min = nr;
+		}
+	}
+
+	if (aabb.size() < min_cost) {
+		//cout << c_traversal * aabb.size() << " " << min_cost << endl;
+		return 1e100;
+	}
+
+	//printf("nl_min: %d, nr_min: %d, cost: %lf\n", nl_min, nr_min, min_cost);
+	return min_cost;
+}
+
 
 GeometryIntersectInfo *KDTree::do_intersect(Node *root, const Ray &ray)
 {
@@ -289,6 +420,47 @@ GeometryIntersectInfo *KDTree::intersect(const Ray &ray)
 	if (t < EPS)
 		return nullptr;
 	return do_intersect(root, ray);
+}
+
+void KDTree::print_stats() {
+	Stats stats;
+	do_print_stats(root, 0, stats);
+
+#define PRINT_EXPR(expr) \
+	cout << #expr << ": " << (expr) << endl;
+#define PRINT_EXPR_PROMPT(prompt, expr) \
+	cout << prompt << ": " << (expr) << endl;
+
+	printf("----- kd-tree stats -----\n");
+	PRINT_EXPR(stats.n_node);
+	PRINT_EXPR(stats.leaf_min_depth); 
+	PRINT_EXPR(stats.leaf_max_depth); 
+	PRINT_EXPR(stats.n_leaf);
+	PRINT_EXPR(stats.n_primitive);
+	PRINT_EXPR(stats.leaf_n_prim_min);
+	PRINT_EXPR(stats.leaf_n_prim_max);
+	PRINT_EXPR_PROMPT("ave prim per leaf:", stats.n_primitive / (double)stats.n_leaf);
+	printf("------------------------\n");
+
+#undef PRINT_EXPR
+#undef PRINT_EXPR_PROMPT
+	fflush(stdout);
+}
+
+void KDTree::do_print_stats(Node *root, int depth, Stats &stats) {
+	if (root == nullptr)
+		return;
+	if (root->is_leaf()) {
+		stats.n_leaf ++;
+		stats.leaf_min_depth = min(stats.leaf_min_depth, depth);
+		stats.leaf_max_depth = max(stats.leaf_max_depth, depth);
+		stats.n_primitive += root->primitive.size();
+		stats.leaf_n_prim_min = min(stats.leaf_n_prim_min, (int)root->primitive.size());
+		stats.leaf_n_prim_max = max(stats.leaf_n_prim_max, (int)root->primitive.size());
+		return;
+	}
+	do_print_stats(root->ch[0], depth + 1, stats);
+	do_print_stats(root->ch[1], depth + 1, stats);
 }
 
 /**

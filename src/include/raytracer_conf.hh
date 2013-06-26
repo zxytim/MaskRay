@@ -1,6 +1,6 @@
 /*
  * $File: raytracer_conf.hh
- * $Date: Wed Jun 26 23:17:56 2013 +0800
+ * $Date: Thu Jun 27 02:43:30 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -18,6 +18,7 @@ class RayTracerConf
 		int N_THREDED_WORKER; // -1 means auto
 		int N_ITER;
 		int N_ITER_WRITE_IMAGE;
+		int N_ITER_SHOW_IMAGE;
 
 		std::string IMAGE_NAME;
 		std::string IMAGE_FORMAT;
@@ -26,8 +27,9 @@ class RayTracerConf
 			STOP_ENERGY_THRESHOLD(0.01),
 			TRACE_DEPTH_MAX(15),
 			N_THREDED_WORKER(8),
-			N_ITER(12),
-			N_ITER_WRITE_IMAGE(2),
+			N_ITER(12000000),
+			N_ITER_WRITE_IMAGE(10),
+			N_ITER_SHOW_IMAGE(2),
 			IMAGE_NAME("output-mid"),
 			IMAGE_FORMAT("png")
 		{}

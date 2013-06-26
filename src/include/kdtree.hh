@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.hh
- * $Date: Wed Jun 26 23:35:21 2013 +0800
+ * $Date: Thu Jun 27 02:19:39 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -42,8 +42,9 @@ class KDTree
 			AABB(real_t *x, real_t *y, real_t *z);
 
 			void get_coord_range(int axis, real_t &min_coord, real_t &max_coord) const;
-			real_t get_coord_min(int axis);
-			real_t get_coord_max(int axis);
+			real_t get_coord_min(int axis) const;
+			real_t get_coord_max(int axis) const;
+			real_t get_length(int axis) const { return get_coord_max(axis) - get_coord_min(axis); }
 
 			bool contains(const Vector &pos) const;
 
@@ -77,6 +78,24 @@ class KDTree
 
 		void build_tree(std::vector<Geometry *> primitive);
 
+		struct Stats {
+			int n_node;
+			int leaf_min_depth; 
+			int leaf_max_depth; 
+			int n_leaf;
+			int n_primitive;
+			int leaf_n_prim_min;
+			int leaf_n_prim_max;
+			Stats() :
+				n_node(0), leaf_min_depth(1000000),
+				leaf_max_depth(-1), n_leaf(0), 
+				n_primitive(0), 
+				leaf_n_prim_min(1000000), 
+				leaf_n_prim_max(0) {}
+		};
+		void print_stats();
+		void do_print_stats(Node *root, int depth, Stats &stats);
+
 	protected:
 
 		static AABB merge_aabb(std::vector<AABB> &aabb);
@@ -86,6 +105,8 @@ class KDTree
 
 		GeometryIntersectInfo *do_intersect(Node *root, const Ray &ray); 
 		
+		real_t split_cost(int axis, const std::vector<AABB> &aabb, const AABB
+				&tree_aabb, int depth, real_t &split_coord);
 	public:
 
 		virtual GeometryIntersectInfo *intersect(const Ray &ray); 

@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Wed Jun 26 23:25:54 2013 +0800
+ * $Date: Thu Jun 27 02:57:14 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -78,6 +78,10 @@ void RayTracer::ThreadTaskScheduler::report_task(const std::vector<Intensity> &i
 	int end = min(tid + n_ray_cast, size);
 	if ((end - tid) != (int)intensity.size())
 		printf("%d %d\n", end - tid, (int)intensity.size());
+
+	if ((end - tid) != (int)intensity.size())
+		printf("end - tid: %d, intensity.size(): %d, n_ray_cast: %d\n", 
+				end - tid, (int)intensity.size(), n_ray_cast);
 	assert((end - tid) == (int)intensity.size());
 	for (int i = tid; i < end; i ++)
 		image->data[i] += intensity_to_color(intensity[i - tid]);
@@ -112,19 +116,17 @@ void RayTracer::naive_worker(Camera &camera, Image *image) {
 	int size = image->size();
 	while (naive_worker_working) {
 		int x, y;
-		{
-			if (naive_worker_cur_pos == size) {
-				naive_worker_working = false;
-				break;
-			} else {
-				lock.lock();
-				x = naive_worker_cur_pos / image->height;
-				y = naive_worker_cur_pos % image->height;
-				naive_worker_cur_pos ++;
-				lock.unlock();
-			}
+		lock.lock();
+		if (naive_worker_cur_pos == size) {
+			naive_worker_working = false;
+		} else {
+			if (naive_worker_cur_pos >= size)
+				printf("!!!!%d\n", naive_worker_cur_pos);
+			x = naive_worker_cur_pos / image->height;
+			y = naive_worker_cur_pos % image->height;
+			naive_worker_cur_pos ++;
 		}
-
+		lock.unlock();
 		image->data[x * image->height + y] += intensity_to_color(trace(camera.emit_ray(x, y)));
 	}
 }
@@ -137,7 +139,7 @@ void RayTracer::iterate(Camera &camera, Image *image)
 		nworker = 4;
 
 
-#if 0
+#if 1
 	// naive worker
 	auto threads = new std::thread[nworker];
 
@@ -155,16 +157,14 @@ void RayTracer::iterate(Camera &camera, Image *image)
 	delete [] threads;
 
 	return;
-#endif
-
-#if 1
+#else
 
 	auto threads = new std::thread[nworker];
 	ThreadTaskScheduler *tts = new ThreadTaskScheduler(camera, image);
 
 	for (int i = 0; i < nworker; i ++) {
 		threads[i] = std::thread([&]{worker(tts);});
-//#define SET_CPU_AFFINITY
+		//#define SET_CPU_AFFINITY
 #ifdef SET_CPU_AFFINITY
 		cpu_set_t mask;
 		CPU_ZERO(&mask);
@@ -188,6 +188,7 @@ void RayTracer::iterate(Camera &camera, Image *image)
 
 Image * RayTracer::render(Scene &scene, Camera &camera)
 {
+	printf("start rendering ...\n");
 	this->scene = &scene;
 
 	Image *image = new Image(camera.resol_x, camera.resol_y),
@@ -211,13 +212,16 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 		fflush(stdout);
 		last_time = cur_time;
 
+		cv::Mat mat = image_to_mat(*image);
 		// show image
-		if (i % conf.N_ITER_WRITE_IMAGE == 0) {
+		if (i % conf.N_ITER_SHOW_IMAGE == 0) {
 			average_image(image_accum, i + 1, image);
-			cv::Mat mat = image_to_mat(*image);
 			cv::imshow(window_name, mat);
-			cv::imwrite(conf.IMAGE_NAME + "." + conf.IMAGE_FORMAT, mat);
 			cv::waitKey(1);
+		}
+
+		if (i % conf.N_ITER_WRITE_IMAGE == 0) {
+			cv::imwrite(conf.IMAGE_NAME + "." + conf.IMAGE_FORMAT, mat);
 		}
 	}
 
