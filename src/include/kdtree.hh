@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.hh
- * $Date: Mon Jun 24 21:19:28 2013 +0800
+ * $Date: Tue Jun 25 21:22:38 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -37,6 +37,7 @@ class KDTree
 
 			void set_null();
 			AABB &extend(const AABB &ab);
+			AABB &intersect(const AABB &ab);
 			AABB() {}
 			AABB(real_t *x, real_t *y, real_t *z);
 
@@ -57,7 +58,7 @@ class KDTree
 			int split_axis;
 			real_t split_coord;
 			AABB aabb; // AABB that partitioned the space
-			AABB aabb_ray_test; // = union_aabb(primtive.aabb) \intersect this->aabb
+			AABB aabb_ray_test; // = merge_aabb(primtive.aabb) \intersect this->aabb
 			Node() {ch[0] = ch[1] = nullptr;}
 			std::vector<Geometry *> primitive;
 			bool is_leaf() const { return ch[0] == nullptr && ch[1] == nullptr; }
@@ -78,7 +79,7 @@ class KDTree
 
 	protected:
 
-		static AABB union_aabb(std::vector<AABB> &aabb);
+		static AABB merge_aabb(std::vector<AABB> &aabb);
 
 		std::vector<Geometry *> primitive;
 		Node *do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aabb, int depth); 

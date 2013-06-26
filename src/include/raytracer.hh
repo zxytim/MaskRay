@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.hh
- * $Date: Wed Jun 19 02:43:51 2013 +0800
+ * $Date: Tue Jun 25 22:55:16 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -11,6 +11,8 @@
 #include "renderable.hh"
 #include "image.hh"
 #include "raytracer_conf.hh"
+
+#include <vector>
 
 class RayTracer
 {
@@ -33,7 +35,33 @@ class RayTracer
 		Intensity do_trace(const Ray &ray, int depth);
 
 		IntersectInfo * get_closest_intersection(const Ray &ray);
-		void iterate(Camera &camera);
+
+		class ThreadTaskScheduler {
+			public:
+				bool working;
+				// accumulatively add intensity to image
+				ThreadTaskScheduler(Camera &camera, Image *image, int n_ray_cast = 100);
+
+				int fetch_task(std::vector<Ray> &task); // return task_id
+				void report_task(const std::vector<Intensity> &intensity, int tid);
+
+				static const int NO_TASK = -1;
+
+			protected:
+				Camera &camera;
+				Image *image;
+				int n_ray_cast;
+				int cur_task;
+		};
+
+		// a single iterate of image, intensity is added accumulatively
+		void iterate(Camera &camera, Image *image);
+		void worker(ThreadTaskScheduler *tts);
+
+
+		bool naive_worker_working;
+		int naive_worker_cur_pos;
+		void naive_worker(Camera &camera, Image *image);
 };
 
 /**

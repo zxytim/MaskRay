@@ -109,15 +109,19 @@ int main( int argc, char** argv )
 	//humanoid_tri->normalize().scale(0.8).translate(-1.0, 1.8, 0.0);
 	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/test_data/horse.fine.90k.obj");
 	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/teapot.obj");
-	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
-	humanoid_tri->normalize().scale(0.4).rotate_deg(0, 90).translate(-0.1, 1.4, 0.0);
 	//Mesh *humanoid_tri = mesh_read_from_file("resources/obj/CornellBox-Sphere.obj");
 	//humanoid_tri->normalize().scale(0.5).rotate_deg(0, 90).translate(-1.0, 1.8, 0.0);
-	humanoid_tri->finish();
+	//humanoid_tri->finish();
 
 	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(0.2), new MonoTextureMapper(Intensity(0.95, 0.95, 0.95)), new Material(1.5)));
 	//scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.8, 0.95, 0.95)), new Material(1.5)));
+
+#if 0
+	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
+	humanoid_tri->normalize().scale(0.4).rotate_deg(0, 90).translate(-0.1, 1.4, 0.0);
+	humanoid_tri->finish();
 	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(), new MonoTextureMapper(Intensity(0.75, 0.75, 0.95)), new Material(1.5)));
+#endif
 
 #if 0
 	// glowing balls
@@ -167,9 +171,9 @@ int main( int argc, char** argv )
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2, 2.6, 1.4625,
 			//200, 122);
-			//400, 225);
+			400, 225);
 			//800, 450);
-			1920, 1080);
+			//1920, 1080);
 #endif
 
 
@@ -210,7 +214,8 @@ int main( int argc, char** argv )
 
 
 	RayTracer ray_tracer;
-	Image * image = ray_tracer.render(scene, camera);
+	Image *image = ray_tracer.render(scene, camera);
+	delete image;
 	/*
 	printf("1\n");
 	Mat mat = image_to_mat(*image);

@@ -1,6 +1,6 @@
 /*
  * $File: chrome_sp.cc
- * $Date: Wed Jun 19 14:12:54 2013 +0800
+ * $Date: Tue Jun 25 21:26:23 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -10,7 +10,7 @@
 #include <cassert>
 
 Ray ChromeSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
-		Material * material) {
+		Material * ) {
 
 	assert(le(normal.lengthsqr(), 1.0));
 	assert(le(incident.dir.lengthsqr(), 1.0));

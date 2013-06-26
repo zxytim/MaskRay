@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.cc
- * $Date: Tue Jun 25 03:46:24 2013 +0800
+ * $Date: Tue Jun 25 22:49:29 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -78,6 +78,23 @@ KDTree::AABB &KDTree::AABB::extend(const AABB &ab) {
 	return *this;
 }
 
+KDTree::AABB &KDTree::AABB::intersect(const AABB &ab) {
+	if (ab.x[0] > x[0]) x[0] = ab.x[0];
+	if (ab.y[0] > y[0]) y[0] = ab.y[0];
+	if (ab.z[0] > z[0]) z[0] = ab.z[0];
+	if (ab.x[1] < x[1]) x[1] = ab.x[1];
+	if (ab.y[1] < y[1]) y[1] = ab.y[1];
+	if (ab.z[1] < z[1]) z[1] = ab.z[1];
+	assert(x[0] < x[1] + EPS);
+	assert(y[0] < y[1] + EPS);
+	assert(z[0] < z[1] + EPS);
+	if (x[0] < x[1]) x[0] = x[1];
+	if (y[0] < y[1]) y[0] = y[1];
+	if (z[0] < z[1]) z[0] = z[1];
+	return *this;
+}
+
+
 KDTree::AABB::AABB(real_t *x, real_t *y, real_t *z) {
 	memcpy(this->x, x, sizeof(this->x));
 	memcpy(this->y, y, sizeof(this->y));
@@ -142,8 +159,6 @@ GeometryIntersectInfo *KDTree::Node::intersect(const Ray &ray)
 			ret = gii;
 		}
 	}
-	if (ret)
-		int asdf = 0;
 	return ret;
 }
 
@@ -161,7 +176,7 @@ void KDTree::build_tree(std::vector<Geometry *> primitive)
 		aabb.push_back(ab);
 	}
 	this->primitive = primitive;
-	root = do_build_tree(aabb, union_aabb(aabb), 0);
+	root = do_build_tree(aabb, merge_aabb(aabb), 0);
 }
 
 #include "geometry/mesh.hh"
@@ -174,7 +189,7 @@ void KDTree::Node::insepct() {
 }
 
 
-KDTree::AABB KDTree::union_aabb(std::vector<AABB> &aabb)
+KDTree::AABB KDTree::merge_aabb(std::vector<AABB> &aabb)
 {
 	AABB ab;
 	ab.set_null();
@@ -187,7 +202,8 @@ KDTree::Node *KDTree::do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aa
 	if (aabb.size() == 0)
 		return nullptr;
 	Node *root = new Node();
-	root->aabb_ray_test = union_aabb(aabb);
+	root->aabb_ray_test = merge_aabb(aabb);
+	root->aabb_ray_test.intersect(tree_aabb);
 	root->aabb = tree_aabb;
 	if (aabb.size() < 5 || depth == 25) {
 		for (auto &ab: aabb)

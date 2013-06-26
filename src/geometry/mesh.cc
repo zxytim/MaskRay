@@ -1,6 +1,6 @@
 /*
  * $File: mesh.cc
- * $Date: Tue Jun 25 01:06:11 2013 +0800
+ * $Date: Tue Jun 25 21:26:31 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -205,8 +205,6 @@ void Mesh::KDTreeFace::get_shape(real_t *x, real_t *y, real_t *z) {
 	Vector &v0 = mesh->v[fa.v[0]],
 		   &v1 = mesh->v[fa.v[1]],
 		   &v2 = mesh->v[fa.v[2]];
-	if (fa.v[0] == 57)
-		int asdf = 0;
 
 	x[0] = min(v0.x, min(v1.x, v2.x));
 	x[1] = max(v0.x, max(v1.x, v2.x));

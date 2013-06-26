@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.cc
- * $Date: Mon Jun 24 02:47:00 2013 +0800
+ * $Date: Tue Jun 25 21:25:48 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -15,7 +15,7 @@ SurfaceProperty::SurfaceProperty(EmissionProperty * emission_property) :
 			this->emission_property = new EmissionProperty();
 	}
 // Lambertian surface by default
-Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, Material * material)
+Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, Material *)
 {
 	Ray ray;
 	Vector &dir = ray.dir;

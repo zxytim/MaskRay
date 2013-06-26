@@ -1,6 +1,6 @@
 #
 # $File: Makefile
-# $Date: Tue Jun 25 02:07:31 2013 +0800
+# $Date: Wed Jun 26 14:06:27 2013 +0800
 #
 # A single output portable Makefile for
 # simple c++ project
@@ -15,7 +15,9 @@ INCLUDE_DIR = -I src/include
 DEFINES = -D__DEBUG_BUILD
 
 
-CXXFLAGS += -O3 #-g -O0 #-pg
+CXXFLAGS += -O3
+#CXXFLAGS += -g -O0
+#CXXFLAGS += -pg
 CXXFLAGS += #$(DEFINES)
 CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall -Wextra 

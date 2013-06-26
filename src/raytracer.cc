@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Tue Jun 25 02:03:42 2013 +0800
+ * $Date: Wed Jun 26 14:11:27 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -13,7 +13,10 @@
 #include "util.hh"
 #include <cv.h>
 #include <highgui.h>
+#include <string>
 #include <algorithm>
+
+#include <sys/time.h>
 
 using namespace std;
 
@@ -21,13 +24,6 @@ static Color intensity_to_color(const Intensity &intensity)
 {
 	return Color(intensity.r, intensity.g, intensity. b);
 }
-
-Image* image_accum;
-Image* image_show;
-int phase;
-
-bool still_iterate;
-int N_ITER_MAX = 100000;
 
 real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
 Intensity clamp(const Intensity &i) {
@@ -38,84 +34,189 @@ Color clamp(const Color &i) {
 	return Color(clamp(i.r), clamp(i.g), clamp(i.b));
 }
 
+static void average_image(Image *input, real_t denominator, Image *output) {
+	assert(input->size() == output->size());
+	for (int i = 0, size = input->size(); i < size; i ++)
+		output->data[i] = input->data[i] / denominator;
+}
 
-void RayTracer::iterate(Camera &camera)
-{
-	printf("a thread is stared.\n");
+int RayTracer::ThreadTaskScheduler::fetch_task(std::vector<Ray> &task) {
 	static std::mutex lock;
-	Image * image(new Image(camera.resol_x, camera.resol_y));
-	while (still_iterate) {
-		Color *image_data = image->data;
-		for (int i = 0; i < camera.resol_x; i ++)
-			//#pragma omp parallel for 
-			for (int j = 0; j < camera.resol_y; j ++) {
-				if (!still_iterate) {
-					delete image;
-					return;
-				}
-				Ray ray = camera.emit_ray(i, j);
-				Color color = intensity_to_color(trace(ray));
-				*image_data = color; 
-				image_data ++;
-			}
-
-		lock.lock();
-
-		printf("phase %3d ...\r", phase);
-		fflush(stdout);
-
-		Color *acc = image_accum->data;
-		Color *ptr = image->data;
-		for (int i = 0; i < camera.resol_x; i ++)
-			for (int j = 0; j < camera.resol_y; j ++)
-				*(acc ++) += *(ptr ++);
-		if (1 || (phase & 3) == 0 || phase == N_ITER_MAX - 1)
-		{
-			acc = image_accum->data;
-			Color *image_show_data = image_show->data;
-			for (int i = 0; i < camera.resol_x; i ++)
-				for (int j = 0; j < camera.resol_y; j ++) {
-					*image_show_data = *acc/ (phase + 1);
-					image_show_data ++;
-					acc ++;
-				}
-			assert(image_show_data == image_show->data + image_show->size());
-			cv::Mat mat = image_to_mat(*image_show);
-			cv::imshow("process", mat);
-			cv::imwrite("output-mid.png", mat);
-			cv::waitKey(1);
+	lock.lock();
+	{
+		int start = cur_task,
+			end = cur_task + n_ray_cast,
+			size = camera.resol_x * camera.resol_y;
+		
+		if (end >= size) end = size;
+		if (start >= size || start == end) {
+			working = false;
+			lock.unlock();
+			return NO_TASK;
 		}
 
-		if (phase == N_ITER_MAX - 1)
-			still_iterate = false;
-		phase += 1;
+		task.resize(end - start);
+		for (int i = start; i < end; i ++) {
+			int x = i / camera.resol_y;
+			int y = i % camera.resol_y;
+			task[i - start] = camera.emit_ray(x, y);
+		}
+	}
+	lock.unlock();
 
-		lock.unlock();
+	int ret = cur_task;
+	cur_task += n_ray_cast;
+	return ret;
+}
+
+void RayTracer::ThreadTaskScheduler::report_task(const std::vector<Intensity> &intensity, int tid) {
+	int size = camera.resol_x * camera.resol_y;
+
+	int end = min(tid + n_ray_cast, size);
+	if ((end - tid) != (int)intensity.size())
+		printf("%d %d\n", end - tid, (int)intensity.size());
+	assert((end - tid) == (int)intensity.size());
+	for (int i = tid; i < end; i ++)
+		image->data[i] += intensity_to_color(intensity[i - tid]);
+}
+
+void RayTracer::worker(ThreadTaskScheduler *tts) {
+	std::vector<Ray> task;
+	std::vector<Intensity> intensity;
+	while (tts->working) {
+		int tid = tts->fetch_task(task);
+		if (tid == ThreadTaskScheduler::NO_TASK)
+			continue;
+
+		intensity.resize(task.size());
+
+		for (size_t i = 0; i < task.size(); i ++)
+			intensity[i] = trace(task[i]);
+
+		tts->report_task(intensity, tid);
+	}
+}
+
+RayTracer::ThreadTaskScheduler::ThreadTaskScheduler(Camera &camera, Image *image, int n_ray_cast) :
+	camera(camera), image(image), n_ray_cast(n_ray_cast)
+{
+	cur_task = 0;
+	working = true;
+}
+
+void RayTracer::naive_worker(Camera &camera, Image *image) {
+	static std::mutex lock;
+	int size = image->size();
+	while (naive_worker_working) {
+		int x, y;
+		{
+			if (naive_worker_cur_pos == size) {
+				naive_worker_working = false;
+				break;
+			} else {
+				lock.lock();
+				x = naive_worker_cur_pos / image->height;
+				y = naive_worker_cur_pos % image->height;
+				naive_worker_cur_pos ++;
+				lock.unlock();
+			}
+		}
+
+		image->data[x * image->height + y] += intensity_to_color(trace(camera.emit_ray(x, y)));
+	}
+}
+
+void RayTracer::iterate(Camera &camera, Image *image)
+{
+	int nworker = conf.N_THREDED_WORKER;
+	// TODO: fetch #cpu 
+	if (nworker == -1)
+		nworker = 4;
+
+
+#if 0
+	auto threads = new std::thread[nworker];
+
+	naive_worker_working = true;
+	naive_worker_cur_pos = 0;
+
+	for (int i = 0; i < nworker; i ++)
+		threads[i] = std::thread([&]{naive_worker(camera, image);});
+
+	for (int i = 0; i < nworker; i ++) {
+		threads[i].join();
 	}
 
-	delete image;
+	delete [] threads;
+
+	return;
+#endif
+
+#if 0
+	// force
+	for (int i = 0; i < image->width; i ++)
+		for (int j = 0; j < image->height; j ++) {
+			image->data[i * image->height + j] += intensity_to_color(trace(camera.emit_ray(i, j)));
+		}
+	return;
+#endif
+
+	auto threads = new std::thread[nworker];
+	ThreadTaskScheduler *tts = new ThreadTaskScheduler(camera, image);
+
+	for (int i = 0; i < nworker; i ++)
+		threads[i] = std::thread([&]{worker(tts);});
+
+	for (int i = 0; i < nworker; i ++) {
+		threads[i].join();
+	}
+
+	delete [] threads;
+	delete tts;
+}
+
+static long long get_time() {
+	timeval tv;
+	gettimeofday(&tv, 0);
+	return tv.tv_sec * 1000ll + tv.tv_usec / 1000;
 }
 
 Image * RayTracer::render(Scene &scene, Camera &camera)
 {
 	this->scene = &scene;
-	image_show = (new Image(camera.resol_x, camera.resol_y));
-	image_accum = (new Image(camera.resol_x, camera.resol_y));
-	cv::namedWindow("process", CV_WINDOW_AUTOSIZE);
 
-	int nworker = 4;
-	still_iterate = true;
-	auto threads = new std::thread[nworker];
-	for (int i = 0; i < nworker; i ++)
-		threads[i] = std::thread([&]{iterate(camera);});
+	Image *image = new Image(camera.resol_x, camera.resol_y),
+		  *image_accum = (new Image(camera.resol_x, camera.resol_y));
 
-	for (int i = 0; i < nworker; i ++)
-		threads[i].join();
+	conf.print();
+	string window_name = "Intermediate Image";
+	cv::namedWindow(window_name, CV_WINDOW_AUTOSIZE);
 
-	delete [] threads;
-	delete image_show;
+	long long start_time = get_time();
+	long long last_time = start_time;
+	for (int i = 0; i < conf.N_ITER; i ++) {
+		iterate(camera, image_accum);
+		long long cur_time = get_time();
+		printf("iteration %5d, speed: ave %dms, last: %dms, tot: %lldms, %lld ray/s\r", 
+				i, (int)((cur_time - start_time) / (i + 1)), 
+				(int)(cur_time - last_time),
+				cur_time - start_time,
+				(long long)(image->size()) * (i + 1) * 1000 / (cur_time - start_time) );
+		fflush(stdout);
+		last_time = cur_time;
+
+		average_image(image_accum, i + 1, image);
+		cv::Mat mat = image_to_mat(*image);
+		cv::imshow(window_name, mat);
+		if (i % conf.N_ITER_WRITE_IMAGE == 0) {
+			cv::imwrite(conf.IMAGE_NAME + "." + conf.IMAGE_FORMAT, mat);
+		}
+		cv::waitKey(1);
+	}
+
+	printf("\n");
 	delete image_accum;
-	return nullptr;
+	return image;
 }
 
 Intensity RayTracer::trace(const Ray &ray)
