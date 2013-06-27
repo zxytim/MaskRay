@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Thu Jun 27 03:37:04 2013 +0800
+ * $Date: Thu Jun 27 14:18:05 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -214,10 +214,11 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 		fflush(stdout);
 		last_time = cur_time;
 
+		average_image(image_accum, i + 1, image);
+#if 0
 		cv::Mat mat = image_to_mat(*image);
 		// show image
 		if (i % conf.N_ITER_SHOW_IMAGE == 0) {
-			average_image(image_accum, i + 1, image);
 			cv::imshow(window_name, mat);
 			cv::waitKey(1);
 		}
@@ -225,6 +226,7 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 		if (i % conf.N_ITER_WRITE_IMAGE == 0) {
 			cv::imwrite(conf.IMAGE_NAME + "." + conf.IMAGE_FORMAT, mat);
 		}
+#endif
 	}
 
 	printf("\n");

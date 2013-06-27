@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.cc
- * $Date: Thu Jun 27 03:04:27 2013 +0800
+ * $Date: Thu Jun 27 12:33:50 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -170,9 +170,9 @@ GeometryIntersectInfo *KDTree::Node::intersect(const Ray &ray)
 void KDTree::build_tree(std::vector<Geometry *> primitive)
 {
 	printf("start building kd-tree ...\n"); fflush(stdout);
+	free_node(root);
 	long long start_time = get_time();
 	{
-
 		std::vector<AABB> aabb;
 		for (size_t i = 0; i < primitive.size(); i ++) {
 			Geometry *p = primitive[i];
@@ -461,6 +461,20 @@ void KDTree::do_print_stats(Node *root, int depth, Stats &stats) {
 	}
 	do_print_stats(root->ch[0], depth + 1, stats);
 	do_print_stats(root->ch[1], depth + 1, stats);
+}
+
+void KDTree::free_node(Node *root) {
+	if (root == nullptr)
+		return;
+
+	free_node(root->ch[0]);
+	free_node(root->ch[1]);
+
+	delete root;
+}
+
+KDTree::~KDTree() {
+	free_node(root);
 }
 
 /**

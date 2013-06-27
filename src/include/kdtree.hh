@@ -1,6 +1,6 @@
 /*
  * $File: kdtree.hh
- * $Date: Thu Jun 27 02:19:39 2013 +0800
+ * $Date: Thu Jun 27 12:29:55 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -74,7 +74,7 @@ class KDTree
 		KDTree() {
 			root = NULL;
 		}
-		virtual ~KDTree() {}
+		virtual ~KDTree();
 
 		void build_tree(std::vector<Geometry *> primitive);
 
@@ -107,6 +107,8 @@ class KDTree
 		
 		real_t split_cost(int axis, const std::vector<AABB> &aabb, const AABB
 				&tree_aabb, int depth, real_t &split_coord);
+		
+		void free_node(Node *node);
 	public:
 
 		virtual GeometryIntersectInfo *intersect(const Ray &ray); 

@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Thu Jun 27 03:29:23 2013 +0800
+ * $Date: Thu Jun 27 12:48:54 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -36,6 +36,7 @@ Renderable *make_renderable_noname(
 
 long long get_time();
 
+void write_image(Image *image, const std::string &fname);
 
 /**
  * vim: syntax=cpp11 foldmethod=marker

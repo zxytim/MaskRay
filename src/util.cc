@@ -1,6 +1,6 @@
 /*
  * $File: util.cc
- * $Date: Wed Jun 26 23:26:52 2013 +0800
+ * $Date: Thu Jun 27 12:50:30 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -10,6 +10,11 @@
 #include <sys/time.h>
 
 using namespace cv;
+
+void write_image(Image *image, const std::string &fname) {
+	cv::Mat mat = image_to_mat(*image);
+	cv::imwrite(fname, mat);
+}
 
 Mat image_to_mat(const Image &image)
 {
