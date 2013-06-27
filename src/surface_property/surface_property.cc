@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.cc
- * $Date: Tue Jun 25 21:25:48 2013 +0800
+ * $Date: Thu Jun 27 03:35:12 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -20,9 +20,9 @@ Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &
 	Ray ray;
 	Vector &dir = ray.dir;
 	do {
-		dir.x = rand_real() * 2.0 - 1.0;
-		dir.y = rand_real() * 2.0 - 1.0;
-		dir.z = rand_real() * 2.0 - 1.0;
+		dir.x = random.rand_real() * 2.0 - 1.0;
+		dir.y = random.rand_real() * 2.0 - 1.0;
+		dir.z = random.rand_real() * 2.0 - 1.0;
 	} while (dir.lengthsqr() > 1.0); // it is of no important using direct comparason between real numbers
 
 	dir.to_normalized();

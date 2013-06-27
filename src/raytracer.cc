@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.cc
- * $Date: Thu Jun 27 02:57:14 2013 +0800
+ * $Date: Thu Jun 27 03:37:04 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -119,6 +119,8 @@ void RayTracer::naive_worker(Camera &camera, Image *image) {
 		lock.lock();
 		if (naive_worker_cur_pos == size) {
 			naive_worker_working = false;
+			lock.unlock();
+			break;
 		} else {
 			if (naive_worker_cur_pos >= size)
 				printf("!!!!%d\n", naive_worker_cur_pos);
@@ -280,7 +282,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	// Russian Roulette
 	real_t prob = max(texture.r, max(texture.g, texture.b));
 	if (depth > 5 || !prob) {
-		if (rand_real() < prob) 
+		if (random.rand_real() < prob) 
 			texture = texture / prob;
 		else
 			return emission;

@@ -1,6 +1,6 @@
 /*
  * $File: camera.hh
- * $Date: Tue Jun 18 23:00:16 2013 +0800
+ * $Date: Thu Jun 27 03:36:37 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -8,6 +8,7 @@
 
 #include "vector.hh"
 #include "ray.hh"
+#include "random.hh"
 
 class Camera
 {
@@ -34,6 +35,10 @@ class Camera
 
 		Ray emit_ray(int x, int y);
 		void normalize();
+
+	protected:
+
+		Random random;
 };
 
 /**

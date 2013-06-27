@@ -1,6 +1,6 @@
 /*
  * $File: math.hh
- * $Date: Wed Jun 26 23:00:56 2013 +0800
+ * $Date: Thu Jun 27 03:32:19 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -52,10 +52,6 @@ inline bool lt(const real_t &a, const real_t &b) {
 inline bool eq(const real_t &a, const real_t &b) {
 	register real_t d = a - b;
 	return -EPS < d && d < EPS;
-}
-
-inline real_t rand_real() {
-	return drand48();
 }
 
 /**

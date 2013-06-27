@@ -1,6 +1,6 @@
 /*
  * $File: raytracer.hh
- * $Date: Wed Jun 26 23:16:57 2013 +0800
+ * $Date: Thu Jun 27 03:33:28 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -62,6 +62,8 @@ class RayTracer
 		bool naive_worker_working;
 		int naive_worker_cur_pos;
 		void naive_worker(Camera &camera, Image *image);
+
+		Random random;
 };
 
 /**

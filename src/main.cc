@@ -30,6 +30,7 @@ int main( int argc, char** argv )
 #endif
 
 #if 0
+	// simple caustic and strong noise
 #if 0
 	scene.add_renderable(make_renderable("back", new Sphere(Vector(50,40.8, 1e5),1e5),
 				new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(.75,.75,.75))));
@@ -60,6 +61,7 @@ int main( int argc, char** argv )
 				new ChromeSurfaceProperty(), new MonoTextureMapper(Intensity(1, 1, 1))));
 	scene.add_renderable(make_renderable("glass", new Sphere(Vector(73,16.5,78), 16.5), new GlassSurfaceProperty(0), new MonoTextureMapper(Intensity(0.999,0.999,0.999)), new Material(1.5)));
 
+#if 0
 	Mesh *tetrahedron = new Mesh();
 	{
 		real_t s3 = sqrt(3.0);
@@ -67,15 +69,17 @@ int main( int argc, char** argv )
 		tetrahedron->face = {Mesh::Face({0, 1, 3}), Mesh::Face({1, 2, 3}), Mesh::Face({2, 0, 3}), Mesh::Face({2, 1, 0})};
 		tetrahedron->normalize().scale(10).translate(30, 16.6, 100);
 	}
-
+	tetrahedron->finish();
 	scene.add_renderable(make_renderable("tetrahedron", tetrahedron, new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.4, 0.4, 0.95))));
+#endif
+
 
 	//scene.add_renderable(make_renderable("light", new Sphere(Vector(50,681.6-.27, 81.6), 600), new MonoGlowingSurfaceProperty(Intensity(1.2, 1.2, 1.2)), new MonoTextureMapper(Intensity(0, 0, 0)), new Material(1.5))); 
 	Camera camera(Vector(50, 52, 295.6), Vector(0, -0.042612, -1), Vector(0, 1, 0),
 			5,
 			4, 3,
-			320, 240);
-			//800, 600);
+			//320, 240);
+			800, 600);
 
 #endif
 
@@ -119,6 +123,24 @@ int main( int argc, char** argv )
 	humanoid_tri->normalize().scale(0.4).rotate_deg(0, 90).translate(-0.1, 1.4, 0.0);
 	humanoid_tri->finish();
 	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(), new MonoTextureMapper(Intensity(0.75, 0.75, 0.95)), new Material(1.5)));
+#endif
+
+#if 1
+	Mesh *mesh0 = mesh_read_from_file("resources/obj/test_data/horse.fine.90k.obj");
+	mesh0->normalize().scale(0.3).rotate_deg(2, 90 + 60).translate(-0.9, 1.2, 0.05);
+	mesh0->finish();
+	scene.add_renderable(make_renderable("mesh0", mesh0, new GlassSurfaceProperty(), new MonoTextureMapper(Intensity(0.81, 0.95, 0.80)), new Material(1.5)));
+#endif
+
+#if 1
+	Mesh *mesh1 = mesh_read_from_file("resources/obj/test_data/bunny.fine.obj");
+	mesh1->normalize()
+		.scale(0.4)
+		.rotate_deg(0, 90)
+		.rotate_deg(2, -30)
+		.translate(1, 1.1, 0.05);
+	mesh1->finish();
+	scene.add_renderable(make_renderable("mesh1", mesh1, new GlassSurfaceProperty(), new MonoTextureMapper(Intensity(0.95, 0.80, 0.80)), new Material(1.5)));
 #endif
 
 #if 0
@@ -169,9 +191,9 @@ int main( int argc, char** argv )
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2, 2.6, 1.4625,
 			//200, 122);
-			400, 225);
+			//400, 225);
 			//800, 450);
-			//1920, 1080);
+			1920, 1080);
 #endif
 
 

@@ -1,6 +1,6 @@
 /*
  * $File: surface_property.hh
- * $Date: Mon Jun 24 03:17:47 2013 +0800
+ * $Date: Thu Jun 27 03:36:10 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -10,6 +10,7 @@
 #include "material.hh"
 #include "intersect_info.hh"
 #include "intensity.hh"
+#include "random.hh"
 #include "emission_property/emission_property.hh"
 
 /*
@@ -45,6 +46,8 @@ class SurfaceProperty
 			if (emission_property)
 				delete emission_property;
 		}
+
+		Random random;
 };
 
 class LambertianSurfaceProperty : public SurfaceProperty

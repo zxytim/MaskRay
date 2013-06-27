@@ -1,6 +1,6 @@
 /*
  * $File: camera.cc
- * $Date: Tue Jun 25 03:36:50 2013 +0800
+ * $Date: Thu Jun 27 03:33:04 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -17,8 +17,8 @@ Ray Camera::emit_ray(int x, int y)
 	real_t screen_center_x = screen_width / 2,
 		   screen_center_y = screen_height / 2;
 
-	real_t o_x = cell_x_unit * x - screen_center_x + rand_real() * cell_x_unit,
-		   o_y = cell_y_unit * y - screen_center_y + rand_real() * cell_y_unit;
+	real_t o_x = cell_x_unit * x - screen_center_x + random.rand_real() * cell_x_unit,
+		   o_y = cell_y_unit * y - screen_center_y + random.rand_real() * cell_y_unit;
 
 	Vector screen_center = eye + front * screen_dist;
 	Vector left = up.cross(front);

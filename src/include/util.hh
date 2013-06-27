@@ -1,6 +1,6 @@
 /*
  * $File: util.hh
- * $Date: Wed Jun 26 23:26:36 2013 +0800
+ * $Date: Thu Jun 27 03:29:23 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -14,6 +14,7 @@
 #include "surface_property.hh"
 #include "texture_mapper.hh"
 #include "material.hh"
+#include "random.hh"
 #include <cstdio>
 #include <cstdlib>
 #include <unistd.h>

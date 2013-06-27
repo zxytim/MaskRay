@@ -1,6 +1,6 @@
 /*
  * $File: glass_sp.cc
- * $Date: Wed Jun 19 16:40:35 2013 +0800
+ * $Date: Thu Jun 27 03:35:36 2013 +0800
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
@@ -49,7 +49,7 @@ Ray GlassSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vec
 
 		real_t reflection = rs * rs + rp * rp;
 		// reflection
-		if (rand_real() < reflection + this->reflectance)
+		if (random.rand_real() < reflection + this->reflectance)
 			ray.dir = incident.dir + normal * (cos_i * 2.0);
 		else {
 			// refract
