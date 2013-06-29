@@ -33,10 +33,10 @@ class Mesh : public Geometry
 {
 	public:
 		Mesh(const MeshConf &conf = MeshConf());
-		virtual bool is_finite() const {
+		bool is_finite() const override {
 			return true;
 		}
-		virtual GeometryIntersectInfo * intersect(const Ray &ray);
+		GeometryIntersectInfo * intersect(const Ray &ray) override;
 
 		GeometryIntersectInfo *brute_force_intersect(const Ray &ray);
 		GeometryIntersectInfo *kdtree_intersect(const Ray &ray);
@@ -102,9 +102,9 @@ class Mesh : public Geometry
 		 */
 		class KDTreeFace : public Geometry {
 			public:
-				virtual GeometryIntersectInfo * intersect(const Ray &ray);
-				virtual bool is_finite() const { return true; }
-				virtual void get_shape(real_t *x, real_t *y, real_t *z);
+				GeometryIntersectInfo * intersect(const Ray &ray) override;
+				bool is_finite() const override { return true; }
+				void get_shape(real_t *x, real_t *y, real_t *z) override;
 
 				int id;
 				Mesh *mesh;
@@ -119,8 +119,8 @@ class Mesh : public Geometry
 class MeshIntersectInfo : public GeometryIntersectInfo
 {
 	public:
-		virtual real_t get_dist() { return dist; }
-		virtual Vector get_normal() { return normal; }
+		real_t get_dist() override { return dist; }
+		Vector get_normal() override { return normal; }
 
 		real_t dist;
 		Vector normal;

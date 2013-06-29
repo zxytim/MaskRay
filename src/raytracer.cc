@@ -215,7 +215,7 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 		last_time = cur_time;
 
 		average_image(image_accum, i + 1, image);
-#if 0
+#if 1
 		cv::Mat mat = image_to_mat(*image);
 		// show image
 		if (i % conf.N_ITER_SHOW_IMAGE == 0) {

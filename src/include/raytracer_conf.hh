@@ -28,9 +28,9 @@ class RayTracerConf
 			TRACE_DEPTH_MAX(15),
 			N_THREDED_WORKER(8),
 			N_ITER(12000000),
-			N_ITER_WRITE_IMAGE(10),
-			N_ITER_SHOW_IMAGE(2),
-			IMAGE_NAME("output-mid"),
+			N_ITER_WRITE_IMAGE(1),
+			N_ITER_SHOW_IMAGE(10),
+			IMAGE_NAME("/tmp/output-mid"),
 			IMAGE_FORMAT("png")
 		{}
 

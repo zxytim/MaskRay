@@ -11,8 +11,8 @@
 class SphereIntersectInfo : public GeometryIntersectInfo
 {
 	public:
-		virtual real_t get_dist() { return dist; }
-		virtual Vector get_normal() { return normal; }
+		real_t get_dist() override { return dist; }
+		Vector get_normal() override { return normal; }
 		SphereIntersectInfo(const real_t &dist, const Vector &normal) :
 			dist(dist), normal(normal) {}
 
@@ -24,7 +24,7 @@ class SphereIntersectInfo : public GeometryIntersectInfo
 class Sphere : public Geometry
 {
 	public:
-		virtual GeometryIntersectInfo * intersect(const Ray &ray);
+		GeometryIntersectInfo * intersect(const Ray &ray) override;
 
 	public:
 		Vector o;

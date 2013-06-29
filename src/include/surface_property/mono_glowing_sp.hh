@@ -13,11 +13,11 @@ class MonoGlowingSurfaceProperty : public SurfaceProperty
 		MonoGlowingSurfaceProperty(const Intensity &intensity = Intensity(1.0, 1.0, 1.0)) :
 			intensity(intensity) {}
 
-		virtual bool is_emissive() const {
+		bool is_emissive() const override {
 			return true;
 		}
 
-		virtual Intensity get_emission(IntersectInfo &) {
+		Intensity get_emission(IntersectInfo &) override {
 			return intensity;
 		}
 

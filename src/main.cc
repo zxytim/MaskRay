@@ -95,7 +95,7 @@ int main( int argc, char** argv )
 	// }}}
 
 	RayTracer ray_tracer;
-	for (int i = 0; i < 360; i ++) {
+	for (int i = 0; i < 1; i ++) {
 		printf("Frame: %d\n", i); fflush(stdout);
 		humanoid_tri->normalize().scale(0.4).rotate_deg(2, 1).translate(-0.1, 1.4, 0.0);
 		humanoid_tri->finish();
