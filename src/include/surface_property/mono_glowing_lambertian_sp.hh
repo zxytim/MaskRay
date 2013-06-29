@@ -13,10 +13,10 @@ class MonoGlowingLambertianSurfaceProperty : public SurfaceProperty
 		
 		MonoGlowingLambertianSurfaceProperty(const Intensity &emission) :
 			emission(emission) {}
-		bool is_emissive() const override { 
+		virtual bool is_emissive() const override { 
 			return true;
 		}
-		Intensity get_emission(IntersectInfo &) override {
+		virtual Intensity get_emission(IntersectInfo &) override {
 			return emission;
 		}
 

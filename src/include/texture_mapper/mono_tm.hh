@@ -12,7 +12,7 @@ class MonoTextureMapper : public TextureMapper
 {
 	public:
 		MonoTextureMapper(const Intensity &intensity);
-		Intensity get_texture(IntersectInfo &intersect_info) override;
+		virtual Intensity get_texture(IntersectInfo &intersect_info) override;
 
 	protected:
 		Intensity intensity;
