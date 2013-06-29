@@ -20,8 +20,14 @@ Screenshots
 
 TODOs
 -----
-- SAH-based kd-tree
+- SAH-based kd-tree, tweaks, (or VVH-based kd-tree ?)
 - more BRDFs
 - Metropolis Light Transport
 - Photon Map
-
+- MPI implementation
+- Grid-computing-like loosely-aggregated rendering cluster
+- Hardware acceleration (CUDA)
+- Glass broken effect
+- Command line interface
+- Scene description script spec
+- Obj file implementation
