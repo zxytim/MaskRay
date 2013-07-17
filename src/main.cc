@@ -68,9 +68,9 @@ int main( int argc, char** argv )
 #if 1
 	/*{{{ balls*/
 
-	scene.add_renderable(make_renderable("glowing ball", new Sphere(Vector(0, 2.6, 0), 0.3), new MonoGlowingSurfaceProperty(Intensity(10.6, 10.47, 10.29)), new MonoTextureMapper(Intensity(1.0, 1.0, 1.0))));
+    scene.add_renderable(make_renderable("glowing ball", new Sphere(Vector(0, 2.8, 0), 0.3), new MonoGlowingSurfaceProperty(Intensity(10.6, 10.47, 10.29)), new MonoTextureMapper(Intensity(1.0, 1.0, 1.0))));
+    scene.add_renderable(make_renderable("chrome ball", new Sphere(Vector(-1.1, 2.8, 0), 0.5), new ChromeSurfaceProperty(), new MonoTextureMapper(Intensity(0.8, 0.8, 0.8))));
 	scene.add_renderable(make_renderable("glass ball", new Sphere(Vector(1.1, 1.6, 0), 0.5), new GlassSurfaceProperty(-1), new MonoTextureMapper(Intensity(0.8, 1.0, 0.7)), new Material(1.5)));
-    //scene.add_renderable(make_renderable("glass ball", new Sphere(Vector(-0.5, 3.0, 0), 0.5), new GlassSurfaceProperty(-1), new MonoTextureMapper(Intensity(0.8, 1.0, 0.7)), new Material(1.5)));
     scene.add_renderable(make_renderable("glass ball", new Sphere(Vector(-1.1, 1.0, 0), 0.5), new GlassSurfaceProperty(-1), new MonoTextureMapper(Intensity(0.8, 1.0, 0.7)), new Material(1.5)));
 	/*}}}*/
 
@@ -91,7 +91,7 @@ int main( int argc, char** argv )
 	Camera camera(Vector(0, -0.8, 0), Vector(0, 1, 0), Vector(0, 0, 1),
 			1.2,
 			2.6, 1.4625,
-            2.4, 0.5,
+            2.4, 0.1,
 			//200, 122);
 		    //400, 225);
             800, 450);
@@ -114,4 +114,5 @@ int main( int argc, char** argv )
 /**
  * vim: syntax=cpp11 foldmethod=marker
  */
+
 

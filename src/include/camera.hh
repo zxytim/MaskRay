@@ -28,7 +28,7 @@ class Camera
 
 		Camera(const Vector &eye, const Vector &front, const Vector &up,
 				real_t screen_dist, real_t screen_width, real_t screen_height,
-				real_t focal_dist , real_t lens_dist ,
+				real_t focal_dist , real_t lens_radius ,
 				int resol_x, int resol_y) :
 			eye(eye), front(front), up(up),
 			screen_dist(screen_dist), screen_width(screen_width), screen_height(screen_height),
@@ -48,4 +48,5 @@ class Camera
 /**
  * vim: syntax=cpp11 foldmethod=marker
  */
+
 
