@@ -6,6 +6,7 @@
 
 #include "camera.hh"
 #include "math.hh"
+#include <cstdio>
 
 Ray Camera::emit_ray(int x, int y)
 {
@@ -25,11 +26,23 @@ Ray Camera::emit_ray(int x, int y)
 
 	Vector screen_pos = screen_center + left * o_x + up * o_y;
 
-	Vector dir = (screen_pos - eye).normalize();
+
+	o_x = random.rand_real() * lens_radius ,
+    o_y = random.rand_real() * lens_radius ;
+
+	Vector lens_sampler = eye + left * o_x + up * o_y ;                 // lens_sampler is a sampler point on the lens
+	Vector focal_pos = screen_pos * ( focal_dist / screen_dist ) ;      // focal_pos is the point on focal plane
+
+	//Vector dir = (screen_pos - eye).normalize();
+
+	Vector dir = ( focal_pos - lens_sampler ).normalize() ;
+
 	//printf("o(%lf, %lf, %lf)\n", screen_pos.x, screen_pos.y, screen_pos.z);
 	//printf("d(%lf, %lf, %lf)\n", dir.x, dir.y, dir.z);
 	//return Ray(screen_pos, dir);
-	return Ray(eye, dir);
+
+	//return Ray(eye, dir);
+	return Ray( lens_sampler , dir ) ;
 }
 
 void Camera::normalize()
