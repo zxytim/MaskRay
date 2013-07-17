@@ -20,6 +20,8 @@ Screenshots
 
 TODOs
 -----
+- Depth of Field
+- Motion Blur
 - SAH-based kd-tree, tweaks, (or VVH-based kd-tree ?)
 - more BRDFs
 - Metropolis Light Transport
@@ -31,3 +33,4 @@ TODOs
 - Command line interface
 - Scene description script spec
 - Obj file implementation
+- Instancing -- transformation on renderable
