@@ -29,7 +29,7 @@ CXXFLAGS += -fopenmp
 
 LDFLAGS = 
 
-CXX = g++ -msse2
+CXX = g++
 CXXSOURCES = $(shell find src/ -name "*.cc")
 OBJS = $(addprefix $(OBJ_DIR)/,$(CXXSOURCES:.cc=.o))
 DEPFILES = $(OBJS:.o=.d)

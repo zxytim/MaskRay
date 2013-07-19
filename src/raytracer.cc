@@ -4,6 +4,7 @@
  * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
+
 #include "raytracer.hh"
 #include "intensity.hh"
 #include <queue>
@@ -50,7 +51,7 @@ int RayTracer::ThreadTaskScheduler::fetch_task(std::vector<Ray> &task) {
 		int start = cur_task,
 			end = cur_task + n_ray_cast,
 			size = camera.resol_x * camera.resol_y;
-		
+
 		if (end >= size) end = size;
 		if (start >= size || start == end) {
 			working = false;
@@ -80,7 +81,7 @@ void RayTracer::ThreadTaskScheduler::report_task(const std::vector<Intensity> &i
 		printf("%d %d\n", end - tid, (int)intensity.size());
 
 	if ((end - tid) != (int)intensity.size())
-		printf("end - tid: %d, intensity.size(): %d, n_ray_cast: %d\n", 
+		printf("end - tid: %d, intensity.size(): %d, n_ray_cast: %d\n",
 				end - tid, (int)intensity.size(), n_ray_cast);
 	assert((end - tid) == (int)intensity.size());
 	for (int i = tid; i < end; i ++)
@@ -136,7 +137,7 @@ void RayTracer::naive_worker(Camera &camera, Image *image) {
 void RayTracer::iterate(Camera &camera, Image *image)
 {
 	int nworker = conf.N_THREDED_WORKER;
-	// TODO: fetch #cpu 
+	// TODO: fetch #cpu
 	if (nworker == -1)
 		nworker = 4;
 
@@ -206,8 +207,8 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 		iterate(camera, image_accum);
 
 		long long cur_time = get_time();
-		printf("iteration %5d, speed: ave %dms, last: %dms, tot: %lldms, %lld ray/s\r", 
-				i, (int)((cur_time - start_time) / (i + 1)), 
+		printf("iteration %5d, speed: ave %dms, last: %dms, tot: %lldms, %lld ray/s\r",
+				i, (int)((cur_time - start_time) / (i + 1)),
 				(int)(cur_time - last_time),
 				cur_time - start_time,
 				(long long)(image->size()) * (i + 1) * 1000 / (cur_time - start_time) );
@@ -284,7 +285,7 @@ Intensity RayTracer::do_trace(const Ray &incident, int depth)
 	// Russian Roulette
 	real_t prob = max(texture.r, max(texture.g, texture.b));
 	if (depth > 5 || !prob) {
-		if (random.rand_real() < prob) 
+		if (random.rand_real() < prob)
 			texture = texture / prob;
 		else
 			return emission;
