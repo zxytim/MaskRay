@@ -1,7 +1,7 @@
-/*
- * $File: mesh.hh
- * $Date: Tue Jun 25 01:24:12 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: mesh.hh
+ *@date: Tue Jun 25 01:24:12 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
@@ -24,10 +24,16 @@ struct MeshConf
 	 */
 	int use_kdtree;
 
-	MeshConf() : 
+	MeshConf() :
 		use_kdtree(2)
 	{}
 };
+
+/**
+ *@class   Mesh mesh.hh "src/include/geometry/mesh.hh"
+ *@date:   Tue Jun 25 01:24:12 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
 
 class Mesh : public Geometry
 {
@@ -52,7 +58,7 @@ class Mesh : public Geometry
 
 		/**
 		 * IMPORTANT:
-		 *		This method must be invoked if 
+		 *		This method must be invoked if
 		 *		kdtree is enabled
 		 */
 		void finish();
@@ -115,6 +121,12 @@ class Mesh : public Geometry
 
 		GeometryIntersectInfo *face_intersect(int id, const Ray &ray);
 };
+
+/**
+ *@class   MeshIntersectInfo mesh.hh "src/include/geometry/mesh.hh"
+ *@date:   Tue Jun 25 01:24:12 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
 
 class MeshIntersectInfo : public GeometryIntersectInfo
 {

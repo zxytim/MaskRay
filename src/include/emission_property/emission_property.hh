@@ -1,7 +1,7 @@
-/*
- * $File: emission_property.hh
- * $Date: Mon Jun 24 03:18:14 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: emission_property.hh
+ *@date: Mon Jun 24 03:18:14 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
@@ -9,8 +9,11 @@
 #include "intensity.hh"
 #include "intersect_info.hh"
 
-/*
- * EmissionProperty may be used by SurfaceProperty.
+/**
+ *@class    EmissionProperty emission_property.hh "src/include/emission_property.hh"
+ *@date:    Mon Jun 24 03:18:14 2013 +0800
+ *@author:  Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:   EmissionProperty may be used by SurfaceProperty.
  */
 class EmissionProperty
 {

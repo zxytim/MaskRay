@@ -1,7 +1,9 @@
-/*
- * $File: camera.hh
- * $Date: Thu Jun 27 03:36:37 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   camera.hh
+ *@date:   Mon Jul 22 14:01:57 CST 2013
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *         Shicao Li <shicao.li[at]gmail[dot]com>
+ *@brief:  This is a thinLens camera.
  */
 
 #pragma once
@@ -10,22 +12,34 @@
 #include "ray.hh"
 #include "random.hh"
 #include <cstdio>
+
+/**
+ *@class    Camera camera.hh "src/include/camera.hh"
+ *@author:  Shicao Li <shicao.li[at]gmail[dot]com>
+ *@brief:   Thinlens camera.
+ */
+
+
 class Camera
 {
 	public:
-		Vector eye,
-			   front,
-			   up;
+		Vector eye,                             ///< eye is the location of the camera.
+			   front,                           ///< front is the vector that the camera lookat .
+			   up;                              ///< up id is vector that just above the camera .
 
-		real_t screen_dist ;
-        real_t focal_dist ;                     // focal_dist is the distance between the eye and the focal plane
-        real_t lens_radius ;                    // lens_radius is the radius of the lens on the camera
-		real_t screen_width , screen_height ;
+		real_t screen_dist ;                    ///< screen_dist is the distance beteewn the eye ans the screen.
+        real_t focal_dist ;                     ///< focal_dist is the distance between the eye and the focal plane.
+        real_t lens_radius ;                    ///< lens_radius is the radius of the lens on the camera.
+		real_t screen_width ;                   ///< width of the screen.
+		real_t screen_height ;                  ///< hight of th screen.
 
-		int resol_x, resol_y;
+		int resol_x;                            ///< The pixel number of width.
+		int resol_y;                            ///< The pixel number of hight.
 
 		Camera() {}
-
+        /**
+         *@brief:   constructed function
+         */
 		Camera(const Vector &eye, const Vector &front, const Vector &up,
 				real_t screen_dist, real_t screen_width, real_t screen_height,
 				real_t focal_dist , real_t lens_radius ,
@@ -37,12 +51,12 @@ class Camera
 				normalize();
 			}
 
-		Ray emit_ray(int x, int y);
-		void normalize();
+		Ray emit_ray(int x, int y);             ///< emit_ray product a ray and return it.
+		void normalize();                       ///< normalize up and front vector.
 
 	protected:
 
-		Random random;
+		Random random;                          ///< get random x and y ( 0 < x < 1 && 0 < y < 1 ) .
 };
 
 /**

@@ -1,7 +1,7 @@
-/*
- * $File: kdtree.hh
- * $Date: Thu Jun 27 12:29:55 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: kdtree.hh
+ *@date: Thu Jun 27 12:29:55 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
@@ -16,14 +16,18 @@
 
 
 /**
+ *@class KDTree kdtree.hh "src/include/kdtree.hh"
+ *@date: Thu Jun 27 12:29:55 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *
  * used for ray-to-primitive intersection test
  * methods that a primitive needs:
  *
  *		// each of the parameter is a int array of length 2
- *		void get_shape(real_t *x, real_t *y, real_t *z); 
+ *		void get_shape(real_t *x, real_t *y, real_t *z);
  *
  *		IntersectInfo *intersect(const Ray &ray);
- *		
+ *
  */
 class KDTree
 {
@@ -63,7 +67,7 @@ class KDTree
 			Node() {ch[0] = ch[1] = nullptr;}
 			std::vector<Geometry *> primitive;
 			bool is_leaf() const { return ch[0] == nullptr && ch[1] == nullptr; }
-			GeometryIntersectInfo *intersect(const Ray &ray); 
+			GeometryIntersectInfo *intersect(const Ray &ray);
 
 			void insepct();
 		};
@@ -80,17 +84,17 @@ class KDTree
 
 		struct Stats {
 			int n_node;
-			int leaf_min_depth; 
-			int leaf_max_depth; 
+			int leaf_min_depth;
+			int leaf_max_depth;
 			int n_leaf;
 			int n_primitive;
 			int leaf_n_prim_min;
 			int leaf_n_prim_max;
 			Stats() :
 				n_node(0), leaf_min_depth(1000000),
-				leaf_max_depth(-1), n_leaf(0), 
-				n_primitive(0), 
-				leaf_n_prim_min(1000000), 
+				leaf_max_depth(-1), n_leaf(0),
+				n_primitive(0),
+				leaf_n_prim_min(1000000),
 				leaf_n_prim_max(0) {}
 		};
 		void print_stats();
@@ -101,17 +105,17 @@ class KDTree
 		static AABB merge_aabb(std::vector<AABB> &aabb);
 
 		std::vector<Geometry *> primitive;
-		Node *do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aabb, int depth); 
+		Node *do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aabb, int depth);
 
-		GeometryIntersectInfo *do_intersect(Node *root, const Ray &ray); 
-		
+		GeometryIntersectInfo *do_intersect(Node *root, const Ray &ray);
+
 		real_t split_cost(int axis, const std::vector<AABB> &aabb, const AABB
 				&tree_aabb, int depth, real_t &split_coord);
-		
+
 		void free_node(Node *node);
 	public:
 
-		virtual GeometryIntersectInfo *intersect(const Ray &ray); 
+		virtual GeometryIntersectInfo *intersect(const Ray &ray);
 };
 
 

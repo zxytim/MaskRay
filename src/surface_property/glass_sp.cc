@@ -1,7 +1,7 @@
-/*
- * $File: glass_sp.cc
- * $Date: Thu Jun 27 03:35:36 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   glass_sp.cc
+ *@date:   Thu Jun 27 03:35:36 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "surface_property/glass_sp.hh"
@@ -9,7 +9,16 @@
 #include "math.hh"
 #include <cassert>
 
-Ray GlassSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
+/**
+ *@brief:  Return a ray according to brdf.
+ *@date:   Thu Jun 27 03:35:36 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *
+ * product a ray according to specular reflection or refract.
+ * then return it.
+ */
+
+Ray GlassSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal,
 		Material * material)
 {
 	assert(eq(incident.dir.lengthsqr(), 1.0));
@@ -36,7 +45,7 @@ Ray GlassSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vec
 	}
 
 	real_t delta = 1 - rindex_in * rindex_in * (1 - cos_i * cos_i) / (rindex_out * rindex_out);
-	
+
 	// no refract
 	if (false && delta < 0)
 		ray.dir = incident.dir + normal * (cos_i * 2.0); // reflect

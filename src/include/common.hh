@@ -1,7 +1,8 @@
-/*
- * $File: common.hh
- * $Date: Wed Jun 26 23:26:38 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   common.hh
+ *@date:   Wed Jun 26 23:26:38 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  use some namespace of opencv.
  */
 
 #pragma once

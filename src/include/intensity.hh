@@ -1,12 +1,19 @@
-/*
- * $File: intensity.hh
- * $Date: Thu Jun 20 02:16:54 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: intensity.hh
+ *@date: Thu Jun 20 02:16:54 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "type.hh"
+
+/**
+ *@class   Intensity intensity.hh "src/include/intensity.hh"
+ *@date:   Thu Jun 20 02:16:54 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  light intensity. can turn into color.
+ */
 
 class Intensity
 {

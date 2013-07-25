@@ -1,11 +1,19 @@
-/*
- * $File: sphere.cc
- * $Date: Mon Jun 24 03:18:49 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   sphere.cc
+ *@date:   Mon Jun 24 03:18:49 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "geometry/sphere.hh"
 #include "math.hh"
+
+/**
+ *@brief:  intersect with the ray, return information.
+ *@date:   Mon Jun 24 03:18:49 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@param[in] ray The ray intersect with the object.
+ *return     intersect information.
+ */
 
 GeometryIntersectInfo * Sphere::intersect(const Ray &ray)
 {
@@ -16,7 +24,7 @@ GeometryIntersectInfo * Sphere::intersect(const Ray &ray)
 	real_t dist = 0;
 	if (dist2 > 0)
 		dist = -b - sqrt(dist2);
-	else 
+	else
 		return nullptr;
 	if (dist < 0)
 		return nullptr;

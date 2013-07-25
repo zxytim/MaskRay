@@ -1,7 +1,7 @@
-/*
- * $File: kdtree.cc
- * $Date: Thu Jun 27 12:33:50 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: kdtree.cc
+ *@date: Thu Jun 27 12:33:50 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "kdtree.hh"
@@ -56,11 +56,11 @@ real_t KDTree::AABB::intersect(const Ray &ray) {
 	t0 = (tz0 > t0 ? tz0 : t0);
 	t1 = (tz1 < t1 ? tz1 : t1);
 
-	return (t0 > 0 
+	return (t0 > 0
 			? (t1 > 0
 				?  (t0 < t1 ? t0 : t1)
 				: t0
-			  ) 
+			  )
 			: (t1 > 0
 				? t1
 				: -1));
@@ -188,7 +188,7 @@ void KDTree::build_tree(std::vector<Geometry *> primitive)
 		root = do_build_tree(aabb, merge_aabb(aabb), 0);
 	}
 	long long end_time = get_time();
-	
+
 	printf("kd-tree build time: %lldms\n", end_time - start_time); fflush(stdout);
 	print_stats();
 }
@@ -228,7 +228,7 @@ KDTree::Node *KDTree::do_build_tree(std::vector<AABB> &aabb, const AABB &tree_aa
 #if 1
 	int axis_to_split = depth % 3;
 	root->split_axis = axis_to_split;
-	root->split_coord = 
+	root->split_coord =
 		(root->aabb.get_coord_min(axis_to_split) +
 		 root->aabb.get_coord_max(axis_to_split)) * 0.5;
 #else
@@ -306,7 +306,7 @@ real_t KDTree::split_cost(int axis, const std::vector<AABB> &aabb, const AABB
 			n_out;
 		CoordPro(real_t pos, int n_in, int n_out) :
 			pos(pos), n_in(n_in), n_out(n_out) {}
-	}; 
+	};
 
 	std::vector<CoordPro> coord_pro;
 	for (size_t i = 0; i < coord.size(); ) {
@@ -321,7 +321,7 @@ real_t KDTree::split_cost(int axis, const std::vector<AABB> &aabb, const AABB
 		coord_pro.push_back(cp);
 		i = j;
 	}
-	
+
 
 	int axis_y = (axis + 1) % 3,
 		axis_z = (axis + 2) % 3;
@@ -350,7 +350,7 @@ real_t KDTree::split_cost(int axis, const std::vector<AABB> &aabb, const AABB
 
 		real_t al = splt_crd - coord_low,
 			   ar = a - al;
-		
+
 		real_t sl = al * b + al * c + b * c,
 			   sr = ar * b + ar * c + b * c;
 
@@ -433,8 +433,8 @@ void KDTree::print_stats() {
 
 	printf("----- kd-tree stats -----\n");
 	PRINT_EXPR(stats.n_node);
-	PRINT_EXPR(stats.leaf_min_depth); 
-	PRINT_EXPR(stats.leaf_max_depth); 
+	PRINT_EXPR(stats.leaf_min_depth);
+	PRINT_EXPR(stats.leaf_max_depth);
 	PRINT_EXPR(stats.n_leaf);
 	PRINT_EXPR(stats.n_primitive);
 	PRINT_EXPR(stats.leaf_n_prim_min);

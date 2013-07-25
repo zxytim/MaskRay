@@ -1,7 +1,7 @@
-/*
- * $File: geometry.cc
- * $Date: Mon Jun 24 08:30:27 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   geometry.cc
+ *@date:   Mon Jun 24 08:30:27 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "geometry/geometry.hh"

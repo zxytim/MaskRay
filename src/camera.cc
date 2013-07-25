@@ -1,12 +1,26 @@
-/*
- * $File: camera.cc
- * $Date: Thu Jun 27 03:33:04 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   camera.cc
+ *@date:   Mon Jul 22 14:25:56 CST 2013
+ *@author: Shicao Li <shicao.li[at]gmail[dot]com>
+ *@brief:  achieve some function.
  */
 
 #include "camera.hh"
 #include "math.hh"
 #include <cstdio>
+
+/**
+ *@brief:   Product a ray from eye to the (x,y) pixel on the screen.
+ *@param[in]  x  The pixel's x coordinate on the screen(width).
+ *@param[in]  y  The pixel's y coordinate on the screen(hight).
+ *@return:   Function return a ray from eye to the (x,y) pixel on the screen.
+ *
+ *  We get a sampler point on the eye called lens_sampler at first, the eye's randius is lens_randius.
+ *  Then we get a sampler point on (x,y) pixel called screen_pos.
+ *  Then we find the point on focal plane that correspond with screen_pos , we call it focal_pos.
+ *  Finally we product a ray from lens_sampler to focal_pos and normalize it .
+ */
+
 
 Ray Camera::emit_ray(int x, int y)
 {
@@ -29,7 +43,7 @@ Ray Camera::emit_ray(int x, int y)
 
 	o_x = 2 * ( random.rand_real() - 0.5 ) * lens_radius ,
     o_y = 2 * ( random.rand_real() - 0.5 ) * lens_radius ;
-    //printf( "o_x: %lf o_y: %lf lens_radius: %lf \n" , o_x , o_y , lens_radius ) ;
+
 	Vector lens_sampler = eye + left * o_x + up * o_y ;                                 // lens_sampler is a sampler point on the lens
 	Vector focal_pos = eye + ( screen_pos - eye ) * ( focal_dist / screen_dist ) ;      // focal_pos is the point on focal plane
 

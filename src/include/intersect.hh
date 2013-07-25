@@ -1,7 +1,7 @@
-/*
- * $File: intersect.hh
- * $Date: Mon Jun 17 17:07:33 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: intersect.hh
+ *@date: Mon Jun 17 17:07:33 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once

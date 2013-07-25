@@ -1,7 +1,7 @@
-/*
- * $File: chrome_sp.cc
- * $Date: Tue Jun 25 21:26:23 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   chrome_sp.cc
+ *@date:   Tue Jun 25 21:26:23 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "surface_property/chrome_sp.hh"
@@ -9,7 +9,13 @@
 
 #include <cassert>
 
-Ray ChromeSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, 
+/**
+ *@brief:   get a reflect ray as the result of perfect specular reflection.
+ *@date:   Tue Jun 25 21:26:23 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
+
+Ray ChromeSurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal,
 		Material * ) {
 
 	assert(le(normal.lengthsqr(), 1.0));

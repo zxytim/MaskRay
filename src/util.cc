@@ -1,7 +1,7 @@
-/*
- * $File: util.cc
- * $Date: Thu Jun 27 12:50:30 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: util.cc
+ *@date: Thu Jun 27 12:50:30 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "util.hh"
@@ -11,11 +11,17 @@
 
 using namespace cv;
 
+/**
+ *@brief:  write image.
+ */
 void write_image(Image *image, const std::string &fname) {
 	cv::Mat mat = image_to_mat(*image);
 	cv::imwrite(fname, mat);
 }
 
+/**
+ *@brief:   change image into mat , return the mat.
+ */
 Mat image_to_mat(const Image &image)
 {
 	Mat mat(image.height, image.width, CV_8UC3, Scalar::all(0));
@@ -47,7 +53,11 @@ Mat image_to_mat(const Image &image)
 	return mat;
 }
 
-Renderable *make_renderable(std::string name, 
+/**
+ *@brief:   product a renderable ,then return it.
+ */
+
+Renderable *make_renderable(std::string name,
 		Geometry *geometry,
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper,
@@ -67,6 +77,9 @@ Renderable *make_renderable(std::string name,
 			tm, mtrl);
 }
 
+/**
+ *@brief:   product a renderable ,then return it( no name ).
+ */
 Renderable *make_renderable_noname(
 		Geometry *geometry,
 		SurfaceProperty *surface_property,
@@ -83,6 +96,9 @@ Renderable *make_renderable_noname(
 	return make_renderable(name, geometry, surface_property, texture_mapper, material);
 }
 
+/**
+ *@brief:   return current time.
+ */
 
 long long get_time() {
 	timeval tv;

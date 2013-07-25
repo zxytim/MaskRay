@@ -1,7 +1,7 @@
-/*
- * $File: mesh.cc
- * $Date: Wed Jun 26 23:28:46 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: mesh.cc
+ *@date: Wed Jun 26 23:28:46 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "geometry/mesh.hh"
@@ -22,7 +22,7 @@ GeometryIntersectInfo * Mesh::intersect(const Ray &ray) {
 #if 0
 		static int cnt = 0;
 		cnt ++;
-		if (cnt == 5168) 
+		if (cnt == 5168)
 			int asdf = 0;
 		GeometryIntersectInfo *ptr0 = brute_force_intersect(ray);
 		GeometryIntersectInfo *ptr1 = kdtree_intersect(ray);
@@ -66,7 +66,7 @@ GeometryIntersectInfo * Mesh::brute_force_intersect(const Ray &ray)
 		real_t v = ray.dir.dot(qvec) * inv_det;
 		if (v < 0.0 || u + v > 1.0)
 			continue;
-		
+
 		real_t dist = edge2.dot(qvec) * inv_det;
 
 		if (dist > EPS && dist < ret->dist) {
@@ -342,7 +342,7 @@ Mesh *mesh_read_from_file(const std::string &fname)
 			mesh->face.push_back(f);
 		}
 	}
-	
+
 	return mesh;
 }
 

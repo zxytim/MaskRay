@@ -1,7 +1,7 @@
-/*
- * $File: surface_property.cc
- * $Date: Thu Jun 27 03:35:12 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: surface_property.cc
+ *@date: Thu Jun 27 03:35:12 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #include "surface_property/surface_property.hh"
@@ -9,12 +9,25 @@
 
 #include "math.hh"
 
+/**
+ *@brief:  if there is emission surface ,assign it to emission_property.
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@param[in] emission_property the emission surface.
+ */
 SurfaceProperty::SurfaceProperty(EmissionProperty * emission_property) :
 	emission_property(emission_property) {
 		if (this->emission_property == nullptr)
 			this->emission_property = new EmissionProperty();
 	}
-// Lambertian surface by default
+
+/**
+ *@brief:  Lambertian surface by default.
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@param[in] incident  incident ray.
+ *@param[in] dist      distance between object and camera.
+ *@param[in] normal    nromal vector of the collision point.
+ *@return   A reflect ray randomly according to brdf.
+ */
 Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &normal, Material *)
 {
 	Ray ray;
@@ -32,10 +45,13 @@ Ray SurfaceProperty::ray_bounce(const Ray &incident, real_t dist, const Vector &
 
 	ray.energy = 1.0;
 	ray.o = incident.o + incident.dir * dist;
-	
+
 	return ray;
 }
-
+/**
+ *@brief:  get radio from the emissonsurface.
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ */
 Intensity SurfaceProperty::get_emission(IntersectInfo &intersect_info)
 {
 	return emission_property->get_emission(intersect_info);

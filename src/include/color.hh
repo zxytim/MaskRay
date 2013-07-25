@@ -1,13 +1,20 @@
-/*
- * $File: color.hh
- * $Date: Wed Jun 19 01:50:34 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: color.hh
+ *@date: Wed Jun 19 01:50:34 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "type.hh"
 typedef double color_t;
+
+/**
+ *@class    Color color.hh "src/include/color.hh"
+ *@date:    Wed Jun 19 01:50:34 2013 +0800
+ *@author:  Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:   RGB color.
+ */
 
 class Color
 {

@@ -1,7 +1,7 @@
-/*
- * $File: raytracer.cc
- * $Date: Thu Jun 27 14:18:05 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: raytracer.cc
+ *@date: Thu Jun 27 14:18:05 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 
@@ -23,20 +23,36 @@
 
 using namespace std;
 
+/**
+ *@brief:   change intensity into color.
+ */
+
 static Color intensity_to_color(const Intensity &intensity)
 {
 	return Color(intensity.r, intensity.g, intensity. b);
 }
-
+/**
+ *@brief:   clamp to 1.
+ */
 real_t clamp(real_t x) { return x < 0 ? x : x > 1 ? 1 : x; }
+
+/**
+ *@brief:   clamp intensity to ( 1 , 1 , 1 ).
+ */
 Intensity clamp(const Intensity &i) {
 	return Intensity(clamp(i.r), clamp(i.g), clamp(i.b));
 }
 
+/**
+ *@brief:   clamp color to ( 1 , 1 , 1 ).
+ */
 Color clamp(const Color &i) {
 	return Color(clamp(i.r), clamp(i.g), clamp(i.b));
 }
 
+/**
+ *@brief:   average input image.
+ */
 static void average_image(Image *input, real_t denominator, Image *output) {
 	assert(input->size() == output->size());
 	for (int i = 0, size = input->size(); i < size; i ++)
@@ -112,6 +128,10 @@ RayTracer::ThreadTaskScheduler::ThreadTaskScheduler(Camera &camera, Image *image
 	working = true;
 }
 
+/**
+ *@brief:  threading control, then call tracer.
+ */
+
 void RayTracer::naive_worker(Camera &camera, Image *image) {
 	static std::mutex lock;
 	int size = image->size();
@@ -134,6 +154,9 @@ void RayTracer::naive_worker(Camera &camera, Image *image) {
 	}
 }
 
+/**
+ *@brief:   iterate call tracer.
+ */
 void RayTracer::iterate(Camera &camera, Image *image)
 {
 	int nworker = conf.N_THREDED_WORKER;
@@ -189,6 +212,10 @@ void RayTracer::iterate(Camera &camera, Image *image)
 #endif
 }
 
+/**
+ *@brief:   render the scene.
+ */
+
 Image * RayTracer::render(Scene &scene, Camera &camera)
 {
 	printf("start rendering ...\n");
@@ -235,11 +262,17 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 	return image;
 }
 
+/**
+ *@brief:   call do_trace to tracing a ray.
+ */
 Intensity RayTracer::trace(const Ray &ray)
 {
 	return do_trace(ray, conf.TRACE_DEPTH_MAX);
 }
 
+/**
+ *@brief:   get closest collision point.
+ */
 
 IntersectInfo * RayTracer::get_closest_intersection(const Ray &ray)
 {
@@ -262,6 +295,12 @@ IntersectInfo * RayTracer::get_closest_intersection(const Ray &ray)
 
 	return ii;
 }
+
+/**
+ *@brief:   tracer.
+ *
+ *tracer will stop if depth = 0.
+ */
 
 Intensity RayTracer::do_trace(const Ray &incident, int depth)
 {

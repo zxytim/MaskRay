@@ -1,7 +1,7 @@
-/*
- * $File: raytracer.hh
- * $Date: Thu Jun 27 03:33:28 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: raytracer.hh
+ *@date: Thu Jun 27 03:33:28 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
@@ -14,27 +14,34 @@
 
 #include <vector>
 
+/**
+ *@class   RayTracer raytracer.hh "src/include/raytracer.hh"
+ *@date:   Thu Jun 27 03:33:28 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  This class will render the scene by ray tracing .
+ */
+
 class RayTracer
 {
 	public:
-		Image * render(Scene &scene, Camera &camera);
+		Image * render(Scene &scene, Camera &camera);       ///< render the scene.
 
 	//protected:
 
 		/*
 		 * Intermediate variable
 		 */
-		Scene *scene;
+		Scene *scene;                                               ///< the scene.
 
-		RayTracerConf conf;
+		RayTracerConf conf;                                         ///< some control information of ray tracer.
 
 		/**
 		 * Single trace thread
 		 */
-		Intensity trace(const Ray &ray);
-		Intensity do_trace(const Ray &ray, int depth);
+		Intensity trace(const Ray &ray);                            ///< call do_trace.
+		Intensity do_trace(const Ray &ray, int depth);              ///< trace the ray.
 
-		IntersectInfo * get_closest_intersection(const Ray &ray);
+		IntersectInfo * get_closest_intersection(const Ray &ray);   ///< get collision point.
 
 		class ThreadTaskScheduler {
 			public:

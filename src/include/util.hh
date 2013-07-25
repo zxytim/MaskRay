@@ -1,7 +1,8 @@
-/*
- * $File: util.hh
- * $Date: Thu Jun 27 12:48:54 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   util.hh
+ *@date:   Thu Jun 27 12:48:54 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  Defines some functions may be used.
  */
 
 #pragma once
@@ -22,7 +23,7 @@
 
 cv::Mat image_to_mat(const Image &image);
 
-Renderable *make_renderable(std::string name, 
+Renderable *make_renderable(std::string name,
 		Geometry *geometry,
 		SurfaceProperty *surface_property,
 		TextureMapper *texture_mapper = NULL,

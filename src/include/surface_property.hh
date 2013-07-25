@@ -1,7 +1,7 @@
-/*
- * $File: surface_property.hh
- * $Date: Wed Jun 19 14:51:36 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   surface_property.hh
+ *@date:   Wed Jun 19 14:51:36 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once

@@ -1,7 +1,8 @@
-/*
- * $File: type.hh
- * $Date: Mon Jun 24 02:03:10 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file:   type.hh
+ *@date:   Mon Jun 24 02:03:10 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  define some type.
  */
 
 #pragma once

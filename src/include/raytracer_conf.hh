@@ -1,13 +1,21 @@
-/*
- * $File: raytracer_conf.hh
- * $Date: Thu Jun 27 12:55:18 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: raytracer_conf.hh
+ *@date: Thu Jun 27 12:55:18 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "type.hh"
 #include <string>
+
+
+/**
+ *@class   RayTracerConf raytracer_conf.hh "src/include/raytracer_conf.hh"
+ *@date:   Thu Jun 27 12:55:18 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  raytracer control information.
+ */
 
 class RayTracerConf
 {

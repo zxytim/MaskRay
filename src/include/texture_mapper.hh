@@ -1,7 +1,7 @@
-/*
- * $File: texture_mapper.hh
- * $Date: Tue Jun 18 20:58:28 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: texture_mapper.hh
+ *@date: Tue Jun 18 20:58:28 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once

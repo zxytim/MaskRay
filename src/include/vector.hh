@@ -1,7 +1,7 @@
-/*
- * $File: vector.hh
- * $Date: Mon Jun 24 04:07:25 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: vector.hh
+ *@date: Mon Jun 24 04:07:25 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
@@ -10,6 +10,13 @@
 #include <xmmintrin.h>
 
 #include <cmath>
+
+/**
+ *@class   Vector vector.hh "src/include/vector.hh"
+ *@date:   Mon Jun 24 04:07:25 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  Vector is vector or point, this class define some operation.
+ */
 
 class Vector
 {

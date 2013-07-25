@@ -1,7 +1,7 @@
-/*
- * $File: geometry.hh
- * $Date: Wed Jun 19 19:26:07 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: geometry.hh
+ *@date: Wed Jun 19 19:26:07 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once

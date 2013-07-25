@@ -1,13 +1,20 @@
-/*
- * $File: image.hh
- * $Date: Tue Jun 25 02:03:19 2013 +0800
- * $Author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+/**
+ *@file: image.hh
+ *@date: Tue Jun 25 02:03:19 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
  */
 
 #pragma once
 
 #include "color.hh"
 #include <cstring>
+
+/**
+ *@class   Image image.hh "src/include/image.hh"
+ *@date:   Tue Jun 25 02:03:19 2013 +0800
+ *@author: Xinyu Zhou <zxytim[at]gmail[dot]com>
+ *@brief:  image class.
+ */
 
 class Image
 {
