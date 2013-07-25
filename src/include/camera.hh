@@ -15,23 +15,22 @@
 
 /**
  *@class    Camera camera.hh "src/include/camera.hh"
- *@author:  Shicao Li <shicao.li[at]gmail[dot]com>
- *@brief:   Thinlens camera.
+ *@author   Shicao Li <shicao.li[at]gmail[dot]com>
+ *@brief    Thinlens camera.
  */
-
 
 class Camera
 {
 	public:
-		Vector eye,                             ///< eye is the location of the camera.
-			   front,                           ///< front is the vector that the camera lookat .
-			   up;                              ///< up id is vector that just above the camera .
+		Vector eye,                             ///< location of the camera
+			   front,                           ///< where the camera look at
+			   up;                              ///< up direction
 
-		real_t screen_dist ;                    ///< screen_dist is the distance beteewn the eye ans the screen.
-        real_t focal_dist ;                     ///< focal_dist is the distance between the eye and the focal plane.
-        real_t lens_radius ;                    ///< lens_radius is the radius of the lens on the camera.
-		real_t screen_width ;                   ///< width of the screen.
-		real_t screen_height ;                  ///< hight of th screen.
+		real_t screen_dist ;                    ///< screen_dist is the distance beteewn the eye ans the screen
+        real_t focal_dist ;                     ///< focal_dist is the distance between the eye and the focal plane
+        real_t lens_radius ;                    ///< lens_radius is the radius of the lens on the camera
+		real_t screen_width ;                   ///< width of the screen
+		real_t screen_height ;                  ///< hight of th screen
 
 		int resol_x;                            ///< The pixel number of width.
 		int resol_y;                            ///< The pixel number of hight.
@@ -51,12 +50,12 @@ class Camera
 				normalize();
 			}
 
-		Ray emit_ray(int x, int y);             ///< emit_ray product a ray and return it.
+		Ray emit_ray(int x, int y);             ///< emit a ray from eye to pixel (x, y)
 		void normalize();                       ///< normalize up and front vector.
 
 	protected:
 
-		Random random;                          ///< get random x and y ( 0 < x < 1 && 0 < y < 1 ) .
+		Random random;                          ///< get random x and y ( 0 < x < 1 && 0 < y < 1 ). no lock
 };
 
 /**
