@@ -2,10 +2,11 @@
 bin
 obj
 o_O
+maskray
 output.png
 output-mid.png
 output
 gmon.out
 *.gprof
 buggy
-
+resources
