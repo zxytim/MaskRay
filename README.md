@@ -19,6 +19,15 @@ Screenshots
 <!--<img class="screenshots" src="http://static.zxytim.com/cg/7-glass-dragon-1280x720.png" alt="glass dragon, rendered with kd-tree">-->
 <img class="screenshots" src="examples/dragon-4k.png" alt="glass dragon, rendered with kd-tree">
 
+
+Prerequisite
+------------
+- On Ubuntu:
+```bash
+sudo apt install build-essential pkg-config libopencv-dev
+```
+
+
 TODOs
 -----
 - Depth of Field

@@ -12,8 +12,8 @@
 #include <mutex>
 #include "math.hh"
 #include "util.hh"
-#include <cv.h>
-#include <highgui.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 #include <string>
 #include <algorithm>
 
@@ -199,7 +199,7 @@ Image * RayTracer::render(Scene &scene, Camera &camera)
 
 	conf.print();
 	string window_name = "Intermediate Image";
-	cv::namedWindow(window_name, CV_WINDOW_AUTOSIZE);
+	cv::namedWindow(window_name, cv::WindowFlags::WINDOW_AUTOSIZE);
 
 	long long start_time = get_time();
 	long long last_time = start_time;

@@ -74,11 +74,11 @@ int main( int argc, char** argv )
     scene.add_renderable(make_renderable("glass ball", new Sphere(Vector(-1.1, 1.0, 0), 0.5), new GlassSurfaceProperty(-1), new MonoTextureMapper(Intensity(0.8, 1.0, 0.7)), new Material(1.5)));
 	/*}}}*/
 
-	/*Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
+	// Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon-0.50.obj");
+	Mesh *humanoid_tri = mesh_read_from_file("resources/obj/dragon/dragon.obj");
 	humanoid_tri->normalize().scale(0.4).rotate_deg(0, 90).translate(-0.1, 1.4, 0.0);
 	humanoid_tri->finish();
 	scene.add_renderable(make_renderable("humanoid_tri", humanoid_tri, new GlassSurfaceProperty(), new MonoTextureMapper(Intensity(0.75, 0.75, 0.95)), new Material(1.5)));
-    */
 	/*{{{ walls*/
 	scene.add_renderable(make_renderable("floor", new Sphere(Vector(0, 3.5, -10e6), 10e6-0.5), new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.9, 0.9, 0.9))));
 	scene.add_renderable(make_renderable("back", new Sphere(Vector(0, 10e6, 0), 10e6-4.5), new LambertianSurfaceProperty(), new MonoTextureMapper(Intensity(0.9, 0.9, 0.9))));

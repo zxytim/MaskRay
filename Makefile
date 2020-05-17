@@ -22,7 +22,7 @@ CXXFLAGS += #$(DEFINES)
 CXXFLAGS += -std=c++11
 CXXFLAGS += -Wall -Wextra 
 CXXFLAGS += $(INCLUDE_DIR)
-CXXFLAGS += $(shell pkg-config --libs --cflags opencv)
+CXXFLAGS += $(shell pkg-config --libs --cflags opencv4)
 CXXFLAGS += -pthread
 #CXXFLAGS += -lpthread
 CXXFLAGS += -fopenmp
